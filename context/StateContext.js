@@ -60,6 +60,13 @@ export const StateContext = ({ children }) => {
         return startTimeRegex.test(startTime)
     }
 
+    const validateEmail = (email) => {    
+        
+        const emailRegex = new RegExp(/^[a-z0-9.]{1,64}@[a-z0-9.]{1,64}$/i);
+       
+        return emailRegex.test(email)
+    }
+
     const handleCustomerUpdate = async (updateItems, customer) => {
         if (updateItems.length === 0) {
             return
@@ -70,6 +77,10 @@ export const StateContext = ({ children }) => {
             
         } else if (!validateStartTime(customer["rent_date"])) {
             toast.error(`Please enter a valid start time yyyy-mm-dd.`)
+
+        } else if (!validateEmail(customer["mail"])) {
+            toast.error(`Please enter a valid Email. xxx@x.x`)
+
 
         } else {
 

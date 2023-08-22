@@ -137,7 +137,13 @@ export const StaticContext = ({ children }) => {
     
     const options_rentDuration = {
         "1": "长租一年",
-        "2": "7个月到一年"
+        "2": "7个月到一年",
+        "3": "短租半年",
+        "4": "4个月到半年",
+        "5": "短租三个月",
+        "6": "短租一个月",
+        "7": "短租一周",
+        
     }
 
     const customerCatogary = [
