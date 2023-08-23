@@ -95,6 +95,7 @@ const LandlordSection = ({ developer }) => {
             const data = await response.json()
             
             const landlordsData = JSON.parse(JSON.stringify(data))
+        
             if (!data.error) {
                 setLandlordList(landlordsData)
                 setIndex(0)

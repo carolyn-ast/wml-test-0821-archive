@@ -165,7 +165,7 @@ export const getServerSideProps = async(context) => {
 
     // try{
         const result = await excuteQuery({
-            query: "SELECT * FROM UserForm WHERE Assistant_name = '猫咪头' AND 如下哪些方面需要我们的帮助？ LIKE '%我是租客%' AND Assistant_message NOT LIKE '#%' AND rent_status != 'YES'",
+            query: "SELECT * FROM UserForm WHERE Assistant_name = '猫咪头' AND 如下哪些方面需要我们的帮助？ LIKE '%我是租客%' AND Assistant_message NOT LIKE '#%'",
             values: []
         })
 

@@ -18,7 +18,7 @@ const CustomerContainer = ({ scrollToCustomerDetail }) => {
                 const date2 = new Date(customer.rent_date)
                 
                 const differenceInDays = dayDifference(date1, date2)
-                if (0 < differenceInDays && differenceInDays <= 60){
+                if (0 < differenceInDays && differenceInDays <= 60 && customer.rent_status !=='YES'){
                     return customer
                 }
             })
@@ -29,7 +29,7 @@ const CustomerContainer = ({ scrollToCustomerDetail }) => {
                 const date2 = new Date(customer.rent_date)
                 
                 const differenceInDays = dayDifference(date1, date2)
-                if (67 >= differenceInDays && differenceInDays > 60 ){
+                if (67 >= differenceInDays && differenceInDays > 60 && customer.rent_status!=='YES'){
                     return customer
                 }
             })
@@ -41,7 +41,7 @@ const CustomerContainer = ({ scrollToCustomerDetail }) => {
                 const date2 = new Date(customer.rent_date)
                 
                 const differenceInDays = dayDifference(date1, date2)
-                if (differenceInDays > 67){
+                if (differenceInDays > 67 && customer.rent_status!=='YES'){
                     return customer
                 }
             })

@@ -13,7 +13,8 @@ const SearchBar = () => {
         setFilteredCustomersByID('')
         var code = e.keyCode || e.which || e.charCode;
         if (code == searchBarKeyCode ) {
-            const searchFilteredByID = customers.filter((customer) => customer.UserId === e.target.value )
+            const searchFilteredByID = customers.filter((customer) => customer.UserId=== e.target.value)
+            //const searchFilteredByID = customers.filter((customer) => customer.UserId.includes(e.target.value))
             setFilteredCustomersByID(searchFilteredByID)
         }
     }
@@ -23,7 +24,8 @@ const SearchBar = () => {
         setFilteredCustomersByEmail('')
         var code = e.keyCode || e.which || e.charCode;
         if (code == searchBarKeyCode ) {
-            const searchFilteredByEmail = customers.filter((customer) => customer.mail === e.target.value )
+            const searchFilteredByEmail = customers.filter((customer) => customer.mail=== e.target.value)
+           // const searchFilteredByEmail = customers.filter((customer) => customer.mail.includes(e.target.value) )
             setFilteredCustomersByEmail(searchFilteredByEmail)
         }
 }
@@ -32,7 +34,8 @@ const SearchBar = () => {
     setFilteredCustomersByWechat('')
          var code = e.keyCode || e.which || e.charCode;
          if (code == searchBarKeyCode ) {
-             const searchFilteredByWechat = customers.filter((customer) => customer.wechat_name === e.target.value )
+             const searchFilteredByWechat = customers.filter((customer) => customer.wechat_name === e.target.value)
+             //const searchFilteredByWechat = customers.filter((customer) => customer.wechat_name.includes(e.target.value) )
              setFilteredCustomersByWechat(searchFilteredByWechat)
         }
     }

@@ -67,6 +67,11 @@ export const StateContext = ({ children }) => {
         return emailRegex.test(email)
     }
 
+  
+    const unique = (arr) => {
+        return arr.filter((v,i,a)=>a.findIndex(v2=>(v2.listingUrl===v.listingUrl))===i)
+    };
+
     const handleCustomerUpdate = async (updateItems, customer) => {
         if (updateItems.length === 0) {
             return
@@ -112,6 +117,7 @@ export const StateContext = ({ children }) => {
             toast.error(`Failed to update the customer information to the server side. Error code: (${response.status}), Please try again later.`)
         }
     }
+
     const getMatchedLandlords = async (tables, ifInternal) => {
         let databaseError = false
         let serverError = false
@@ -146,19 +152,19 @@ export const StateContext = ({ children }) => {
         }
         
         if (ifInternal) {
-            const sortLandlord = [...landlords].sort((a, b) => {
-                if(!a.note) return -1;
-                if(!b.note) return 1;
-                return a.note < b.note ? -1 : 1;
-            });
-            setMatchedLandlords(sortLandlord)
+            landlords = landlords.filter((lan) => {
+                if (lan.note === '租客要求看房' ||lan.note === '房源已发客户' || !lan.note) {
+                    return lan
+                }
+            })
+            setMatchedLandlords(unique(landlords))
         } else {
             const sortLandlord = [...landlords].sort((a, b) => {
                 if(!a.match_level) return -1;
                 if(!b.match_level) return 1;
                 return a.match_level < b.match_level ? -1 : 1;
             });
-            setNewHouses(sortLandlord)
+            setNewHouses(unique(sortLandlord))
         }
 
         if (databaseError) {
@@ -222,10 +228,10 @@ export const StateContext = ({ children }) => {
             }
             return lan
         })
-
+        
         setMatchedLandlords(updatedLandlords)
     }
-
+    
     const updateExternalLandlord = (landlord) => {
         const updatedLandlords = newHouses.map((lan) => {
             if (lan.UserId === landlord.UserId && lan.listingId === landlord.listingId) {
@@ -233,7 +239,6 @@ export const StateContext = ({ children }) => {
             }
             return lan
         })
-
         setNewHouses(updatedLandlords)
     }
 

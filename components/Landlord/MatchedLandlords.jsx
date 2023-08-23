@@ -24,14 +24,11 @@ const MatchedLandlords = () => {
         "不匹配": "不匹配",
         "房源已经成交了": "房源已经成交了",
         "租客要求看房": "租客要求看房",
+        "房源已发客户":"房源已发客户"
     }
 
-    const simpleProcess = [
-        "不匹配",
-        "房源已经成交了",
-        "租客要求看房"
-    ]
-
+    const proccessedProperty =  "房源已发客户"
+    
     const previous = () => {
         if (index === 0) {
             return;
@@ -49,22 +46,19 @@ const MatchedLandlords = () => {
     const handleUpdate = () => {
         const landlord = matchedLandlords[index]
         if (customerStatus) {
-            // delete mathced landlord record
-            removeMatchedLandlords(internalCityTables[landlord.listingCity])
-            handleCustomerUpdate({'rent_status': 'YES'}, currentCustomer)
-        } else {
-            handleLandlordUpdate(internalCityTables[landlord.listingCity], updateItems, landlord, null)
-        }
+           
+            handleCustomerUpdate({'rent_status': 'PENDING'}, currentCustomer)
+        } 
+         handleLandlordUpdate(internalCityTables[landlord.listingCity], updateItems, landlord, null)
     }
 
     const handleOptionChange = (e) => {
         const {name} = e.target
-        if (simpleProcess.includes(name)) {
             setUpdateItems({
                 ...updateItems,
                 ['note']: name
             })
-        } else {
+        if (name===proccessedProperty){
             setCustomerStatus(true)
         }
     }
@@ -172,7 +166,7 @@ const MatchedLandlords = () => {
                         </div>
                         <div className="landlord-form-item">
                             <h4>Status</h4>
-                            <LandlordStatus selections = {statusSelection} opt = {matchedLandlords[index].note ? matchedLandlords[index].note : currentCustomer.rent_status} handleChange ={handleOptionChange} />
+                            <LandlordStatus selections = {statusSelection} opt = {matchedLandlords[index].note ? matchedLandlords[index].note : ''} handleChange ={handleOptionChange} />
                         </div>
                     </div>
                     <div className="submit-button-block">

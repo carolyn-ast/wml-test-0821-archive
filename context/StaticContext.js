@@ -153,21 +153,7 @@ export const StaticContext = ({ children }) => {
         "Clients",
         "Past Clients"
     ]
-
-    // const dropDownList = {
-    //     "City": "options_city",
-    //     "gender": "options_gender",
-    //     "rent_type": "options_rentType",
-    //     "house_type": "options_houseType",
-    //     "是否有宠物": "options_pet",
-    //     "Kitchen": "options_Kitchen",
-    //     "Furniture": "options_furniture",
-    //     "车位": "options_parking",
-    //     "semi_underground": "options_underground",
-    //     "room_type": "options_BedroomNum",
-    //     "rent_status": "options_status"
-    // }
-
+    
     const externalCityTables = {
         "Vancouver": "old_vancouver_match",
         "Burnaby": "old_burnaby_match",

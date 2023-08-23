@@ -25,6 +25,8 @@ const CustomerSection = ({ section, customerList, scrollToCustomerDetail }) => {
                 }
             })
             setFilteredCustomers(tempList)
+        } else if (value ==="follow_up" ) {
+            
         }
     }
 
@@ -40,6 +42,7 @@ const CustomerSection = ({ section, customerList, scrollToCustomerDetail }) => {
                         <Form.Select className="dropdown-select" size="sm" onChange={handleSelect}>
                             <option value="all">All</option>
                             <option value="need_check">需要录入和核对房源需求的租客</option>
+                            <option value="follow_up">Yesterday Follow-up</option>
                         </Form.Select>
                     }
                 </Card.Title>

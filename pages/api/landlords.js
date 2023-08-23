@@ -7,6 +7,8 @@ export default async function handler(req, res) {
         try {
             var qry = ""
             if (req.query.table) {
+                //by default string.replace in JavaScript will only replace the first matching value it finds. 
+                //Adding the / g will mean that all of the matching values are replaced.  
                 qry = interpolate(/{table}/g, queries.matched_landlords_by_customer, req.query.table)
             } else {
                 qry = queries.landlords_by_assistant
