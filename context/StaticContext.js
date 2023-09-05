@@ -122,7 +122,8 @@ export const StaticContext = ({ children }) => {
     const options_status = {
         "1": "YES",
         "2": "NO",
-        "3": "PENDING"  
+        "3": "PENDING",
+        "4": "DELETED"  
     }
 
     const options_tenantNum = {
@@ -153,7 +154,7 @@ export const StaticContext = ({ children }) => {
         "Clients",
         "Past Clients"
     ]
-    
+
     const externalCityTables = {
         "Vancouver": "old_vancouver_match",
         "Burnaby": "old_burnaby_match",
