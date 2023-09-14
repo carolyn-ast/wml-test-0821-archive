@@ -62,7 +62,7 @@ export const StateContext = ({ children }) => {
 
     const validateEmail = (email) => {    
         
-        const emailRegex = new RegExp(/^[a-z0-9.]{1,64}@[a-z0-9.]{1,64}$/i);
+        const emailRegex = new RegExp(/^[a-z0-9._-]{1,64}@[a-z0-9.]{1,64}$/i);
        
         return emailRegex.test(email)
     }
@@ -71,6 +71,55 @@ export const StateContext = ({ children }) => {
     const unique = (arr) => {
         return arr.filter((v,i,a)=>a.findIndex(v2=>(v2.listingUrl===v.listingUrl))===i)
     };
+
+    const handleMatchChange = async (customer) => { 
+        
+        const response = await fetch(`http://119.3.241.33:3000/customers/${customer.UserId}`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin":"*",
+                "Authorization":"Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
+            }
+        });
+      console.log(response)
+        if (response.status === 200) {
+            toast.success('Matching is now up to date.')
+
+            const response_extenal = await fetch(`http://119.3.241.33:3000/external/${customer.UserId}`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin":"*",
+                    "Authorization":"Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
+                }
+            });
+            console.log(response_extenal)
+            if (response_extenal.status === 200) {
+                toast.success('External Matching succeeded.')
+            } else {
+                toast.error('External Matching error.')
+            }
+
+            const response_internal = await fetch(`http://119.3.241.33:3000/internal/${customer.UserId}`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin":"*",
+                    "Authorization":"Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
+                }
+            });
+            console.log(response_internal)
+            if (response_internal.status === 200) {
+                toast.success('Internal Matching succeeded.')
+            } else {
+                toast.error('Internal Matching error.')
+            }
+
+        }else{
+        toast.error('Matching error.')
+        }
+    }
 
     const handleCustomerUpdate = async (updateItems, customer) => {
         if (updateItems.length === 0) {
@@ -106,7 +155,7 @@ export const StateContext = ({ children }) => {
                 const data = await response.json()
                 if (!data.error) {
                     toast.success('Successfully updated the customer information')
-                    const new_customer = { ...customer, 'Last Update Date': dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss') }
+                    const new_customer = { ...customer, 'Last Update Date': dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')  }
                     updateCurrentCustomer(new_customer)
                     return
                 } else {
@@ -287,6 +336,7 @@ export const StateContext = ({ children }) => {
             setMatchedLandlords,
             newHouses,
             setNewHouses,
+            handleMatchChange,
             //updateCurrentCustomer,
             // updateCurrentCustomerByID,
             // updateCurrentCustomerByEmail,

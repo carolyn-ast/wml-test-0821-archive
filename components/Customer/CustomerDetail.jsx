@@ -10,7 +10,7 @@ import DropDown from '../DropDown';
 //import "react-datepicker/dist/react-datepicker.css";
 
 const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
-    const { currentCustomer, handleCustomerUpdate } = useStateContext()
+    const { currentCustomer, handleCustomerUpdate, handleMatchChange} = useStateContext()
     const { detailList,
         options_city,
         options_gender,
@@ -168,7 +168,7 @@ const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
                                              
                     
                     <div className="submit-button-block">
-                        <Button variant="success" size="sm" className="submit-button" onClick={() => handleCustomerUpdate(updateItems, customer)}>Update</Button>
+                            <Button variant="success" size="sm" className="submit-button" onClick={() => { handleCustomerUpdate(updateItems, customer); handleMatchChange(customer) }}>Update</Button>
                     </div>
                 </div>
             </div>

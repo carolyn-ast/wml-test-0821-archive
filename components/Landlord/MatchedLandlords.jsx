@@ -43,12 +43,15 @@ const MatchedLandlords = () => {
         setIndex(index + 1)
     }
 
-    const handleUpdate = () => {
+    const handleInternalMatchUpdate = () => {
         const landlord = matchedLandlords[index]
         if (customerStatus) {
            
-            handleCustomerUpdate({'rent_status': 'PENDING'}, currentCustomer)
-        } 
+            handleCustomerUpdate({ 'rent_status': 'PENDING'}, currentCustomer)
+        }
+        // else if (landlord.note === '不匹配' || landlord.note === '房源已经成交了') {
+        //     removeMatchedLandlords (internalCityTables[landlord.listingCity])
+        // }
          handleLandlordUpdate(internalCityTables[landlord.listingCity], updateItems, landlord, null)
     }
 
@@ -56,7 +59,8 @@ const MatchedLandlords = () => {
         const {name} = e.target
             setUpdateItems({
                 ...updateItems,
-                ['note']: name
+                ['note']: name,
+                ['LastUpdatetime']:dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
             })
         if (name===proccessedProperty){
             setCustomerStatus(true)
@@ -147,9 +151,18 @@ const MatchedLandlords = () => {
                             </Card.Body>
                         </Card>
                         }
+                        {matchedLandlords[index].LastUpdatetime && 
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Last Update Time</Card.Title>
+                                <Card.Text>{matchedLandlords[index].LastUpdatetime}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                        }
+                        
                     </div>
                     <div className="landlord-form-container">
-                        <div className="landlord-form-item">
+                        {/* <div className="landlord-form-item">
                             <h4>Last process time</h4>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DateTimePicker 
@@ -163,14 +176,14 @@ const MatchedLandlords = () => {
                                     }} 
                                 />
                             </LocalizationProvider>
-                        </div>
+                        </div> */}
                         <div className="landlord-form-item">
                             <h4>Status</h4>
                             <LandlordStatus selections = {statusSelection} opt = {matchedLandlords[index].note ? matchedLandlords[index].note : ''} handleChange ={handleOptionChange} />
                         </div>
                     </div>
                     <div className="submit-button-block">
-                        <Button variant="success" className="submit-button" onClick={handleUpdate}>Submit</Button>
+                        <Button variant="success" className="submit-button" onClick={handleInternalMatchUpdate}>Submit</Button>
                     </div>
                 </div>
                 }
