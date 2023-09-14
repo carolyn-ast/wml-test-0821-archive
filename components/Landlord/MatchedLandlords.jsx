@@ -141,6 +141,14 @@ const MatchedLandlords = () => {
                                 <Card.Text>{matchedLandlords[index].listingTel}</Card.Text>
                             </Card.Body>
                         </Card>
+                        {matchedLandlords[index].Rent_note && 
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Commission Note</Card.Title>
+                                <Card.Text>{matchedLandlords[index].Rent_note}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                        }        
                         {matchedLandlords[index].listingUrl && 
                         <Card className='landlord-list-item'>
                             <Card.Body>
