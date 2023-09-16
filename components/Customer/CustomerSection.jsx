@@ -5,6 +5,7 @@ import CustomerPreview from './CustomerPreview';
 import Card from 'react-bootstrap/Card';
 import { useStateContext } from '../../context/StateContext';
 
+
 const CustomerSection = ({ section, customerList, scrollToCustomerDetail }) => {
     const { dayDifference } = useStateContext()
 
@@ -26,7 +27,49 @@ const CustomerSection = ({ section, customerList, scrollToCustomerDetail }) => {
             })
             setFilteredCustomers(tempList)
         } else if (value ==="follow_up" ) {
-            
+            const tempList_follow_up = customerList.filter((customer) => {
+                // see all the internally matched customers who were taking actions one day before from the internal matched section showing under this category. 
+                const date = dayDifference(new Date(customer.LastUpdateTime), new Date())
+                if (0 < date && date <= 1 ){
+                    return customer
+                }
+            })
+            tempList_follow_up.sort((a, b) => parseFloat(b.Budget_price) - parseFloat(a.Budget_price));
+            setFilteredCustomers(tempList_follow_up)
+
+        }else if (value ==="see_house" ) {
+            const tempList_see_house = customerList.filter((customer) =>
+            {
+                if (customer.rent_status==='看房客户') {
+                    return customer
+                }
+            })
+            //ordering results by the nearest rate date to later
+            tempList_see_house.sort(function(a,b){
+                return new Date(b.rent_date) - new Date(a.rent_date)
+              })
+            setFilteredCustomers(tempList_see_house)
+        }else if (value ==="short_rent" ) {
+            const tempList_short_rent = customerList.filter((customer) => {
+                if (customer.rent_duration!=='长租1年') {
+                    return customer
+                }
+            })
+            //Order by urgency: most urgent to less urgent
+            tempList_short_rent.sort(function(a,b){
+                return new Date(a.rent_date) - new Date(b.rent_date)
+              })
+            setFilteredCustomers(tempList_short_rent)
+        }else if (value ==="pending" ) {
+            const tempList_pending = customerList.filter((customer) =>
+            {
+                if (customer.rent_status==='PENDING') {
+                    return customer
+                }
+            })
+            //order by price from high to low and then based on urgency: most urgent to least.
+            tempList_pending.sort((a, b) => parseFloat(b.Budget_price) - parseFloat(a.Budget_price));
+            setFilteredCustomers(tempList_pending)
         }
     }
 
@@ -43,6 +86,10 @@ const CustomerSection = ({ section, customerList, scrollToCustomerDetail }) => {
                             <option value="all">All</option>
                             <option value="need_check">需要录入和核对房源需求的租客</option>
                             <option value="follow_up">Yesterday Follow-up</option>
+                            <option value="see_house">看房客户</option>
+                            <option value="short_rent">Short-term rental</option>
+                            <option value="pending">Pending</option>
+                            
                         </Form.Select>
                     }
                 </Card.Title>

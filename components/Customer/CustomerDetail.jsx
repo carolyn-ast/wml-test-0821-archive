@@ -6,8 +6,6 @@ import { useStaticContext } from '../../context/StaticContext';
 import InputField from '../InputField';
 import Textarea from '../Textarea';
 import DropDown from '../DropDown';
-//import DatePicker from "react-datepicker";
-//import "react-datepicker/dist/react-datepicker.css";
 
 const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
     const { currentCustomer, handleCustomerUpdate, handleMatchChange} = useStateContext()
@@ -27,11 +25,6 @@ const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
         options_rentDuration} = useStaticContext()
     const [customer, setCustomer] = useState(currentCustomer)
     const [updateItems, setUpdateItems] = useState({})
-    const [startDate, setStartDate] = useState(new Date());
-    const [postalCode, setPostalCode] = useState();
-    //const [rentTime, setRentTime] = useState();
-
-    
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -45,8 +38,7 @@ const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
             [name]: value
         })
     }
-
-  
+ 
     useEffect(() => {  
         setCustomer(currentCustomer)
         setUpdateItems({})
@@ -55,7 +47,6 @@ const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
         }
     }, [currentCustomer, scrollToCustomerDetail, ref]);
 
-   
     return (
         <div ref={ref}>
             {customer && 
@@ -65,7 +56,7 @@ const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
                     <div className="detail-contanier">
                         {
                             Object.entries(detailList).map(([key, value]) =>
-                                key === 'Submission_Date' || key === 'Last Update Date' || key === 'UserId' || key === 'Assistant_name' ?
+                                key === 'Submission_Date' || key === 'LastUpdateDate' || key === 'UserId' || key === 'Assistant_name' ?
                                     (<InputField
                                         type="text"
                                         value={customer[key]}
@@ -164,8 +155,7 @@ const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
                                         />)
                             )
                         }
-                        
-                                             
+                            
                     
                     <div className="submit-button-block">
                             <Button variant="success" size="sm" className="submit-button" onClick={() => { handleCustomerUpdate(updateItems, customer); handleMatchChange(customer) }}>Update</Button>

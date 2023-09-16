@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { BsChevronDoubleLeft, BsChevronDoubleRight, BsArrowRepeat } from "react-icons/bs";
 import { Button, Card} from 'react-bootstrap';
@@ -6,7 +6,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-
+import { timezoneFormatter } from '../../lib/timezone_utils';
 import { useStateContext } from "../../context/StateContext";
 import { useStaticContext } from '../../context/StaticContext';
 import { LandlordStatus } from '..';
@@ -17,6 +17,8 @@ const MatchedLandlords = () => {
     const { currentCustomer, matchedLandlords, getMatchedLandlords, handleLandlordUpdate, handleCustomerUpdate, removeMatchedLandlords } = useStateContext()
     const { internalCityTables } = useStaticContext()
     const [updateItems, setUpdateItems] = useState({})
+    const [internalStatus, setinternalStatus] = useState()
+    const status=useRef()
     const [customerStatus, setCustomerStatus] = useState(false)
 
     // 请求下一条 could be removed, it is not updated in database
@@ -26,8 +28,6 @@ const MatchedLandlords = () => {
         "租客要求看房": "租客要求看房",
         "房源已发客户":"房源已发客户"
     }
-
-    const proccessedProperty =  "房源已发客户"
     
     const previous = () => {
         if (index === 0) {
@@ -44,27 +44,37 @@ const MatchedLandlords = () => {
     }
 
     const handleInternalMatchUpdate = () => {
+
         const landlord = matchedLandlords[index]
-        if (customerStatus) {
-           
-            handleCustomerUpdate({ 'rent_status': 'PENDING'}, currentCustomer)
-        }
+        // handleLandlordUpdate(internalCityTables[landlord.listingCity], 
         // else if (landlord.note === '不匹配' || landlord.note === '房源已经成交了') {
         //     removeMatchedLandlords (internalCityTables[landlord.listingCity])
         // }
-         handleLandlordUpdate(internalCityTables[landlord.listingCity], updateItems, landlord, null)
+        handleLandlordUpdate(internalCityTables[landlord.listingCity], updateItems, landlord, null).then(value => {
+            if (value === '200') {
+                if (internalStatus === '房源已发客户') {
+                    console.log('已发')
+                     //LIN-23 Once select this option and submitted, the record will be showing under” Yesterday Follow-up”.For records chosen “房源已发客户“ the days before yesterday, it will not show under “Yesterday Follow-up“, but will still show under “Current”
+                    handleCustomerUpdate({
+                        'LastUpdateTime': timezoneFormatter( dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'))
+                    }, currentCustomer)
+                }
+                else if (internalStatus === '租客要求看房') {
+                    console.log('看房')
+                    handleCustomerUpdate({ 'rent_status': '看房客户' }, currentCustomer)
+                }
+            }
+        })
     }
 
     const handleOptionChange = (e) => {
-        const {name} = e.target
+        setinternalStatus(e.target.name)
+        status.current=e.target.name
             setUpdateItems({
                 ...updateItems,
-                ['note']: name,
+                ['note']: e.target.name,
                 ['LastUpdatetime']:dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
             })
-        if (name===proccessedProperty){
-            setCustomerStatus(true)
-        }
     }
 
     useEffect(() => {
@@ -82,7 +92,7 @@ const MatchedLandlords = () => {
             setBookTime(dayjs(new Date()))
         }
      }, [index, matchedLandlords])
-
+    
     return (
         <div>
             {currentCustomer &&

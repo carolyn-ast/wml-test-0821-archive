@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import dayjs from 'dayjs';
+import { timezoneFormatter} from '../lib/timezone_utils';
 const Context = createContext();
 
 export const StateContext = ({ children }) => {
@@ -68,7 +69,11 @@ export const StateContext = ({ children }) => {
     }
 
   
-    const unique = (arr) => {
+    const unique_internal = (arr) => {
+        return arr.filter((v,i,a)=>a.findIndex(v2=>(v2.listingAdd===v.listingAdd))===i)
+    };
+
+    const unique_external = (arr) => {
         return arr.filter((v,i,a)=>a.findIndex(v2=>(v2.listingUrl===v.listingUrl))===i)
     };
 
@@ -146,7 +151,7 @@ export const StateContext = ({ children }) => {
                 body: JSON.stringify({
                     vals: {
                         ...updateItems,
-                        'Last Update Date': dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
+                        'LastUpdateTime': timezoneFormatter( dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'))
                     }
                 })
             });
@@ -155,11 +160,11 @@ export const StateContext = ({ children }) => {
                 const data = await response.json()
                 if (!data.error) {
                     toast.success('Successfully updated the customer information')
-                    const new_customer = { ...customer, 'Last Update Date': dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')  }
+                    const new_customer = { ...customer, 'LastUpdateTime':  timezoneFormatter(dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')  )}
                     updateCurrentCustomer(new_customer)
                     return
                 } else {
-                    toast.error(`Failed to update the customer information to the database. Error: (${data.error.code}), Please check the input or try agian later.`)
+                    toast.error(`Failed to update the customer information to the database. Error: (${data.error.code}), Please check the input or try again later.`)
                     return
                 }
             }
@@ -206,14 +211,14 @@ export const StateContext = ({ children }) => {
                     return lan
                 }
             })
-            setMatchedLandlords(unique(landlords))
+            setMatchedLandlords(unique_internal(landlords))
         } else {
             const sortLandlord = [...landlords].sort((a, b) => {
                 if(!a.match_level) return -1;
                 if(!b.match_level) return 1;
                 return a.match_level < b.match_level ? -1 : 1;
             });
-            setNewHouses(unique(sortLandlord))
+            setNewHouses(unique_external(sortLandlord))
         }
 
         if (databaseError) {
@@ -260,10 +265,10 @@ export const StateContext = ({ children }) => {
                 } else {
                     updateInternalLandlord({...landlord, ...updateItems})
                 }
-                return
+                return Promise.resolve('200')
             } else {
-                toast.error(`Failed to update the landlord note to the database. Error: (${data.error.code}), Please check the input or try agian later.`)
-                return
+                toast.error(`Failed to update the landlord note to the database. Error: (${data.error.code}), Please check the input or try again later.`)
+                return  Promise.reject('500')
             }
         }
         
@@ -306,7 +311,7 @@ export const StateContext = ({ children }) => {
                 toast.success('Successfully delete the matched landlords')
                 return
             } else {
-                toast.error(`Failed to delete the landlords on the database. Error: (${data.error.code}), Please check the input or try agian later.`)
+                toast.error(`Failed to delete the landlords on the database. Error: (${data.error.code}), Please check the input or try again later.`)
                 return
             }
         }

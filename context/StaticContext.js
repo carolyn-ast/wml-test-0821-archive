@@ -6,7 +6,7 @@ export const StaticContext = ({ children }) => {
 
     const detailList = {
         "Submission_Date": "Submission date",
-        "Last Update Date": "Last update Time",
+        "LastUpdateTime": "Last update Time",
         "名": "First Name",
         "姓": "Last Name",
         "UserId":'UserId',
@@ -123,7 +123,8 @@ export const StaticContext = ({ children }) => {
         "1": "YES",
         "2": "NO",
         "3": "PENDING",
-        "4": "DELETED"  
+        "4": "DELETED",
+        "5": "看房客户"  
     }
 
     const options_tenantNum = {
@@ -137,7 +138,7 @@ export const StaticContext = ({ children }) => {
     }
     
     const options_rentDuration = {
-        "1": "长租一年",
+        "1": "长租1年",
         "2": "7个月到一年",
         "3": "短租半年",
         "4": "4个月到半年",

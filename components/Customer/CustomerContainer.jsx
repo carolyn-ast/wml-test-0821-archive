@@ -22,6 +22,8 @@ const CustomerContainer = ({ scrollToCustomerDetail }) => {
                     return customer
                 }
             })
+            //LIN-23.1 Users can see the renter records order sorted by the renter’s budget from high to low.
+            list1.sort((a, b) => parseFloat(b.Budget_price) - parseFloat(a.Budget_price));
             setCurrentCustomers(list1)
 
             const list2 = customers.filter((customer) => {
