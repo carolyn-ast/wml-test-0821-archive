@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import Form from 'react-bootstrap/Form';
 
 import CustomerPreview from './CustomerPreview';
@@ -7,9 +7,9 @@ import { useStateContext } from '../../context/StateContext';
 
 
 const CustomerSection = ({ section, customerList, scrollToCustomerDetail }) => {
-    const { dayDifference } = useStateContext()
-
+    const { dayDifference, prioritizing_cutsomer } = useStateContext()
     const [filteredCustomers, setFilteredCustomers] = useState(customerList)
+
 
     const handleSelect = (e) => {
         const value = e.target.value
@@ -26,49 +26,51 @@ const CustomerSection = ({ section, customerList, scrollToCustomerDetail }) => {
                 }
             })
             setFilteredCustomers(tempList)
-        } else if (value ==="follow_up" ) {
-            const tempList_follow_up = customerList.filter((customer) => {
+        } else if (value === "follow_up") {
+            //order by price from high to low and then based on urgency: most urgent to least.
+
+            const tempList_follow_up_sorted = prioritizing_cutsomer(customerList).sort((a, b) => parseFloat(b.Budget_price) - parseFloat(a.Budget_price))
+            const tempList_follow_up = tempList_follow_up_sorted.filter((customer) => {
                 // see all the internally matched customers who were taking actions one day before from the internal matched section showing under this category. 
                 const date = dayDifference(new Date(customer.LastUpdateTime), new Date())
                 if (0 < date && date <= 1 ){
                     return customer
                 }
             })
-            tempList_follow_up.sort((a, b) => parseFloat(b.Budget_price) - parseFloat(a.Budget_price));
             setFilteredCustomers(tempList_follow_up)
 
-        }else if (value ==="see_house" ) {
+        } else if (value === "see_house") {
+            //ordering results by the nearest rate date to later
+            customerList.sort(function(a,b){
+                return new Date(b.rent_date) - new Date(a.rent_date)
+              })
             const tempList_see_house = customerList.filter((customer) =>
             {
                 if (customer.rent_status==='看房客户') {
                     return customer
                 }
             })
-            //ordering results by the nearest rate date to later
-            tempList_see_house.sort(function(a,b){
-                return new Date(b.rent_date) - new Date(a.rent_date)
-              })
             setFilteredCustomers(tempList_see_house)
-        }else if (value ==="short_rent" ) {
-            const tempList_short_rent = customerList.filter((customer) => {
+
+        } else if (value === "short_rent") {
+            //order by price from high to low and then based on urgency: most urgent to least.
+            const tempList_short_rent_sorted = prioritizing_cutsomer(customerList).sort((a, b) => parseFloat(b.Budget_price) - parseFloat(a.Budget_price))
+            const tempList_short_rent =  tempList_short_rent_sorted.filter((customer) => {
                 if (customer.rent_duration!=='长租1年') {
                     return customer
                 }
             })
-            //Order by urgency: most urgent to less urgent
-            tempList_short_rent.sort(function(a,b){
-                return new Date(a.rent_date) - new Date(b.rent_date)
-              })
             setFilteredCustomers(tempList_short_rent)
-        }else if (value ==="pending" ) {
-            const tempList_pending = customerList.filter((customer) =>
+
+        } else if (value === "pending") {
+             //order by price from high to low and then based on urgency: most urgent to least.
+             const tempList_pending_sorted = prioritizing_cutsomer(customerList).sort((a, b) => parseFloat(b.Budget_price) - parseFloat(a.Budget_price))
+            const tempList_pending = tempList_pending_sorted.filter((customer) =>
             {
                 if (customer.rent_status==='PENDING') {
                     return customer
                 }
             })
-            //order by price from high to low and then based on urgency: most urgent to least.
-            tempList_pending.sort((a, b) => parseFloat(b.Budget_price) - parseFloat(a.Budget_price));
             setFilteredCustomers(tempList_pending)
         }
     }

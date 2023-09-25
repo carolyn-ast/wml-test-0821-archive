@@ -26,6 +26,40 @@ export const StateContext = ({ children }) => {
         var differenceInDays = differenceInTime / (1000 * 3600 * 24);
         return differenceInDays
     }
+
+    const prioritizing_cutsomer = (customers) => {
+        //起租日没过的 优先级更高 离起租日越近 优先级更高
+        //起租日过了的 离起租日越近 优先级越高
+        //起租日没有过的优先级超过起租日已经过了的
+
+   const c_rent_date_not_pass= customers.filter((customer) => {
+        const today = new Date()
+        const rent_day = new Date(customer.rent_date)
+
+        if (dayDifference(today,rent_day)>=0){
+            return customer
+        }
+   })
+   c_rent_date_not_pass.sort(function(a,b){
+    return new Date(a.rent_date) - new Date(b.rent_date)
+   })
+    
+   const c_rent_date_passed= customers.filter((customer) => {
+    const today = new Date()
+    const rent_day = new Date(customer.rent_date)
+
+        if (dayDifference(today,rent_day) <0 ){
+            return customer
+        }
+  })
+    
+  c_rent_date_passed.sort(function(a,b){
+    return new Date(b.rent_date) - new Date(a.rent_date)
+  })
+    
+    const customerList = c_rent_date_not_pass.concat(c_rent_date_passed)
+    return customerList
+}
     
     const updateCurrentCustomer = (customer) => {
         const updatedCustomer = customers.map((cus) => {
@@ -78,52 +112,57 @@ export const StateContext = ({ children }) => {
     };
 
     const handleMatchChange = async (customer) => { 
+            const response = await fetch(`http://119.3.241.33:3000/customers/${customer.UserId}`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Authorization": "Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
+                }
+            });
+            console.log(response)
+            if (response.status === 200) {
+                toast.success('Matching is now processing.')
+
+                const response_extenal = await fetch(`http://119.3.241.33:3000/external/${customer.UserId}`, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        "Authorization": "Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
+                    }
+                });
+                console.log(response_extenal)
+                if (response_extenal.status === 200) {
+                    toast.success('External Matching succeeded.')
+                } else {
+                    toast.error('External Matching error.')
+                }
+
+                const response_internal = await fetch(`http://119.3.241.33:3000/internal/${customer.UserId}`, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        "Authorization": "Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
+                    }
+                });
+                console.log(response_internal)
+                if (response_internal.status === 200) {
+                    toast.success('Internal Matching succeeded.')
+                } else {
+                    toast.error('Internal Matching error.')
+                }
+
+            } else {
+                if (customer.rent_status === 'YES' || customer.rent_status === 'DELETED' || customer.rent_status === '看房客户')
+                {
+                toast.success('It is updated')
+                } else {
+                toast.error('Matching error.')
+            }
+            }
         
-        const response = await fetch(`http://119.3.241.33:3000/customers/${customer.UserId}`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin":"*",
-                "Authorization":"Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
-            }
-        });
-      console.log(response)
-        if (response.status === 200) {
-            toast.success('Matching is now up to date.')
-
-            const response_extenal = await fetch(`http://119.3.241.33:3000/external/${customer.UserId}`, {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin":"*",
-                    "Authorization":"Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
-                }
-            });
-            console.log(response_extenal)
-            if (response_extenal.status === 200) {
-                toast.success('External Matching succeeded.')
-            } else {
-                toast.error('External Matching error.')
-            }
-
-            const response_internal = await fetch(`http://119.3.241.33:3000/internal/${customer.UserId}`, {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin":"*",
-                    "Authorization":"Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
-                }
-            });
-            console.log(response_internal)
-            if (response_internal.status === 200) {
-                toast.success('Internal Matching succeeded.')
-            } else {
-                toast.error('Internal Matching error.')
-            }
-
-        }else{
-        toast.error('Matching error.')
-        }
     }
 
     const handleCustomerUpdate = async (updateItems, customer) => {
@@ -151,7 +190,7 @@ export const StateContext = ({ children }) => {
                 body: JSON.stringify({
                     vals: {
                         ...updateItems,
-                        'LastUpdateTime': timezoneFormatter( dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'))
+                        'LastUpdateTime': timezoneFormatter( dayjs(new Date()))
                     }
                 })
             });
@@ -160,7 +199,7 @@ export const StateContext = ({ children }) => {
                 const data = await response.json()
                 if (!data.error) {
                     toast.success('Successfully updated the customer information')
-                    const new_customer = { ...customer, 'LastUpdateTime':  timezoneFormatter(dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')  )}
+                    const new_customer = { ...customer, 'LastUpdateTime':  timezoneFormatter(dayjs(new Date()))}
                     updateCurrentCustomer(new_customer)
                     return
                 } else {
@@ -342,11 +381,8 @@ export const StateContext = ({ children }) => {
             newHouses,
             setNewHouses,
             handleMatchChange,
-            //updateCurrentCustomer,
-            // updateCurrentCustomerByID,
-            // updateCurrentCustomerByEmail,
-            // updateCurrentCustomerByWechat,
             dayDifference,
+            prioritizing_cutsomer,
             ifLandlordMatched,
             handleCustomerUpdate,
             getMatchedLandlords,

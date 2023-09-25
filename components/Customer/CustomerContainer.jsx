@@ -5,7 +5,7 @@ import { useStateContext } from '../../context/StateContext';
 import { CustomerSection } from '..';//components/index.js
 
 const CustomerContainer = ({ scrollToCustomerDetail }) => {
-    const { filteredCustomersByID,filteredCustomersByEmail,filteredCustomersByWechat, customers, dayDifference } = useStateContext()
+    const { filteredCustomersByID,filteredCustomersByEmail,filteredCustomersByWechat, customers, dayDifference ,prioritizing_cutsomer } = useStateContext()
     const [ isCollapsed, setIsCollapsed ] = useState(false)
     const [ currentCustomers, setCurrentCustomers ] = useState([])
     const [ inSevenCustomers, setInSevenCustomers ] = useState([])
@@ -14,17 +14,18 @@ const CustomerContainer = ({ scrollToCustomerDetail }) => {
     const sortCustomers = () => {
         if (customers.length > 0) {
             const list1 = customers.filter((customer) => {
-                const date1 = new Date()
-                const date2 = new Date(customer.rent_date)
+            //     const date1 = new Date()
+            //     const date2 = new Date(customer.rent_date)
                 
-                const differenceInDays = dayDifference(date1, date2)
-                if (-30 < differenceInDays && differenceInDays <= 60 && customer.rent_status !=='YES' && customer.rent_status !=='DELETED'){
+            //     const differenceInDays = dayDifference(date1, date2)
+                if ( customer.rent_status !=='YES' && customer.rent_status !=='DELETED'){
                     return customer
                 }
             })
-            //LIN-23.1 Users can see the renter records order sorted by the renter’s budget from high to low.
-            list1.sort((a, b) => parseFloat(b.Budget_price) - parseFloat(a.Budget_price));
-            setCurrentCustomers(list1)
+            //Display all customers whose rent status is not “YES” or 'PENDING' or “Deleted” with the order.
+            const all_customer = prioritizing_cutsomer(list1).sort((a, b) => parseFloat(b.Budget_price) - parseFloat(a.Budget_price))
+            
+            setCurrentCustomers(all_customer)
 
             const list2 = customers.filter((customer) => {
                 const date1 = new Date()
