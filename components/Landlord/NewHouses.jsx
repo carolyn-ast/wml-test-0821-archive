@@ -137,7 +137,7 @@ const NewHouses = () => {
                 }
                 { newHouses.length === 0 && 
                 <div>
-                    <h4>No matched external landlords</h4>
+                    <h4>To be developing</h4>
                 </div>
                 }
             </div>

@@ -61,6 +61,7 @@ const MatchedLandlords = () => {
                 }
                 else if (internalStatus === '租客要求看房') {
                     console.log('看房')
+                    console.log(internalStatus)
                     handleCustomerUpdate({ 'rent_status': '看房客户' }, currentCustomer)
                 }
             }
@@ -99,7 +100,7 @@ const MatchedLandlords = () => {
             <div className="module-container">
                 <div className="title title-with-object">
                     <h4>
-                        {"Internal Matched Landlords "}  
+                        {"Matched Linli Landlords"}  
                         <Button 
                         variant="outline-success" 
                         size="sm" 
@@ -207,7 +208,7 @@ const MatchedLandlords = () => {
                 }
                 { matchedLandlords.length === 0 && 
                 <div>
-                    <h4>No matched internal landlords</h4>
+                    <h4>To be developing</h4>
                 </div>
                 }
             </div>

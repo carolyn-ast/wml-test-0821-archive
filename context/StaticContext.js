@@ -5,35 +5,35 @@ const StatContext = createContext();
 export const StaticContext = ({ children }) => {
 
     const detailList = {
-        "Submission_Date": "Submission date",
-        "LastUpdateTime": "Last update Time",
+        "Submission_Date": "Submission Date",
+        "LastUpdateTime": "Last Update Time",
         "名": "First Name",
         "姓": "Last Name",
         "UserId":'UserId',
         "mail": "Email",
-        "wechat_name": "Wechat name",
+        "wechat_name": "Wechat Name",
         "gender": "Gender",
         
         // missing address in db
         // missing phone in db
-        "请填写您的目的地邮编，更好获得附近邻里的帮助": "Postal code",
-        "City": "Target city",
-        "如下哪些方面需要我们的帮助？":"Need help with",
+        "请填写您的目的地邮编，更好获得附近邻里的帮助": "Postal Code",
+        "City": "Target City",
+        "如下哪些方面需要我们的帮助？":"Need Help With",
         "Budget_price": "Budget",
-        "rent_type": "Rent type",
-        "rent_date": "Wish to rent from",
-        "rent_duration": "Rent duration",
-        "几人入住？": "Tenants number",
-        "house_type": "House type",
-        "semi_underground": "Underground acceptance",
-        "room_type": "Room type",
+        "rent_type": "Rent Type",
+        "rent_date": "Wish To Rent From",
+        "rent_duration": "Rent Duration",
+        "几人入住？": "Tenants Number",
+        "house_type": "House Type",
+        "semi_underground": "Underground Acceptance",
+        "room_type": "Room Type",
         "是否有宠物": "Pets Allowed",
         "Kitchen": "Kitchen",
         "Furniture": "Furniture",
         "车位": "Parking",
         "Assistant_name": "Assistant",
-        "rent_status":'rent status',
-        "Leasing_demand": "Leasing demand",
+        "rent_status":'Rent Status',
+        "Leasing_demand": "Leasing Demand",
         "Assistant_message": "Message for Assistant"
        
     }

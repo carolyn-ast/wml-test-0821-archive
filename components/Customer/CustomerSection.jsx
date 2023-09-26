@@ -20,7 +20,7 @@ const CustomerSection = ({ section, customerList, scrollToCustomerDetail }) => {
                 const date1 = new Date()
                 const date2 = new Date(customer.Submission_Date)
                 
-                const differenceInDays = dayDifference(date1, date2)
+                const differenceInDays = dayDifference(date2, date1)
                 if (0 < differenceInDays && differenceInDays <= 2){
                     return customer
                 }
