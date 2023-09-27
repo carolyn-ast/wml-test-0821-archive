@@ -18,7 +18,7 @@ const CustomerContainer = ({ scrollToCustomerDetail }) => {
             //     const date2 = new Date(customer.rent_date)
                 
             //     const differenceInDays = dayDifference(date1, date2)
-                if ( customer.rent_status !=='YES' && customer.rent_status !=='DELETED'){
+                if ( customer.rent_status !=='YES' && customer.rent_status !=='DELETED' && customer.rent_status !=='PENDING'&& customer.rent_duration === '长租1年'){
                     return customer
                 }
             })
@@ -64,7 +64,7 @@ const CustomerContainer = ({ scrollToCustomerDetail }) => {
  
     return (
         <div className="module-container">
-            <h4 className="title">Customers</h4>
+            <h4 className="title">Renters</h4>
             <div className="customer-container">
                 <div >
                    
@@ -95,15 +95,15 @@ const CustomerContainer = ({ scrollToCustomerDetail }) => {
                 <div className="scroll-container">
                    
                         <div> 
-                           <h5>Current customers</h5>
+                           <h5>Active Renters</h5>
                         { currentCustomers.length > 0 &&
-                            <CustomerSection section='Current' customerList={currentCustomers} scrollToCustomerDetail={scrollToCustomerDetail} />
+                            <CustomerSection section='Renting In Progress' customerList={currentCustomers} scrollToCustomerDetail={scrollToCustomerDetail} />
                         }
                         { inSevenCustomers.lenght > 0 &&
-                            <CustomerSection section='New demanding customers in 7 days' customerList={inSevenCustomers} scrollToCustomerDetail={scrollToCustomerDetail}/>
+                            <CustomerSection section="Rental in 7 Days" customerList={inSevenCustomers} scrollToCustomerDetail={scrollToCustomerDetail}/>
                         }
                         { beyondSevenCustomers.length > 0 &&
-                         <CustomerSection section='New demanding customers beyond 7 days' customerList={beyondSevenCustomers} scrollToCustomerDetail={scrollToCustomerDetail}/>
+                         <CustomerSection section="Registered Future Rental Demand" customerList={beyondSevenCustomers} scrollToCustomerDetail={scrollToCustomerDetail}/>
                         }
                     </div>
                     
