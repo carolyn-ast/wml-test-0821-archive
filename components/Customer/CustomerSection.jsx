@@ -88,7 +88,7 @@ const CustomerSection = ({ section, customerList, scrollToCustomerDetail }) => {
                         <Form.Select className="dropdown-select" size="sm" onChange={handleSelect}>
                             <option value="all">All</option>
                             <option value="need_check">需要录入和核对房源需求的租客</option>
-                            <option value="follow_up">Yesterday Follow-up</option>
+                            <option value="follow_up"> Follow-ups</option>
                             <option value="see_house">看房客户</option>
                             <option value="short_rent">Short-term rental</option>
                             <option value="pending">Pending</option>

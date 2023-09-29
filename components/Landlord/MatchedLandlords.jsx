@@ -61,7 +61,6 @@ const MatchedLandlords = () => {
                 }
                 else if (internalStatus === '租客要求看房') {
                     console.log('看房')
-                    console.log(internalStatus)
                     handleCustomerUpdate({ 'rent_status': '看房客户' }, currentCustomer)
                 }
             }
@@ -74,7 +73,7 @@ const MatchedLandlords = () => {
             setUpdateItems({
                 ...updateItems,
                 ['note']: e.target.name,
-                ['LastUpdatetime']:dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
+                ['LastUpdatetime']:timezoneFormatter( dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'))
             })
     }
 
