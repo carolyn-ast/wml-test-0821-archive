@@ -60,7 +60,6 @@ const MatchedLandlords = () => {
                     }, currentCustomer)
                 }
                 else if (internalStatus === '租客要求看房') {
-                    console.log('看房')
                     handleCustomerUpdate({ 'rent_status': '看房客户' }, currentCustomer)
                 }
             }
@@ -129,7 +128,7 @@ const MatchedLandlords = () => {
                     <div className='landlord-display-container'>
                         <Card className='landlord-list-item'>
                             <Card.Body>
-                                <Card.Title>Rent date</Card.Title>
+                                <Card.Title>Rent Date</Card.Title>
                                 <Card.Text>{dayjs(matchedLandlords[index].listing_rent_date).format('YYYY-MM-DD')}</Card.Text>
                             </Card.Body>
                         </Card>
@@ -158,13 +157,31 @@ const MatchedLandlords = () => {
                                 <Card.Text>{matchedLandlords[index].Rent_note}</Card.Text>
                             </Card.Body>
                         </Card>
-                        }        
+                        } 
+                        {!matchedLandlords[index].Rent_note && 
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Commission Note</Card.Title>
+                                <Card.Text>10 days rental as commission</Card.Text>
+                            </Card.Body>
+                        </Card>
+                        }         
                         {matchedLandlords[index].listingUrl && 
                         <Card className='landlord-list-item'>
                             <Card.Body>
-                                <Card.Title>Listing link</Card.Title>
+                                <Card.Title>Listing Link</Card.Title>
                                 <Card.Text>
                                     <Link href={matchedLandlords[index].listingUrl} target ="_blank">Click to go to the page</Link>
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                        }
+                        {matchedLandlords[index].listing_describe && 
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Listing Description</Card.Title>
+                                <Card.Text>
+                                {matchedLandlords[index].listing_describe}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
