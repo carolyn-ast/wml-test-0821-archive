@@ -149,7 +149,15 @@ const MatchedLandlords = () => {
                                 <Card.Title>Phone</Card.Title>
                                 <Card.Text>{matchedLandlords[index].listingTel}</Card.Text>
                             </Card.Body>
+                                </Card>
+                                {matchedLandlords[index].Rent_note && 
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Commission</Card.Title>
+                                <Card.Text>NO</Card.Text>
+                            </Card.Body>
                         </Card>
+                        }  
                         {matchedLandlords[index].Rent_note && 
                         <Card className='landlord-list-item'>
                             <Card.Body>
@@ -157,13 +165,23 @@ const MatchedLandlords = () => {
                                 <Card.Text>{matchedLandlords[index].Rent_note}</Card.Text>
                             </Card.Body>
                         </Card>
-                        } 
+                        }
+                              
+                        {!matchedLandlords[index].Rent_note && 
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Commission</Card.Title>
+                                <Card.Text>YES</Card.Text>
+                                        </Card.Body>
+                                        
+                        </Card>
+                        }       
                         {!matchedLandlords[index].Rent_note && 
                         <Card className='landlord-list-item'>
                             <Card.Body>
                                 <Card.Title>Commission Note</Card.Title>
                                 <Card.Text>10 days rental as commission</Card.Text>
-                            </Card.Body>
+                                        </Card.Body>
                         </Card>
                         }         
                         {matchedLandlords[index].listingUrl && 
