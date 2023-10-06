@@ -120,7 +120,7 @@ export const StateContext = ({ children }) => {
                     "Authorization": "Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
                 }
             });
-            console.log(response)
+           
             if (response.status === 200) {
                 toast.success('Matching is now processing.')
 
@@ -147,7 +147,7 @@ export const StateContext = ({ children }) => {
                         "Authorization": "Bearer yvmFp/J8vOs7QLcs1fcVpoz0ChDfoZZ5kI/l1JdyR0pbEyg7B9XIviOHZmzDV/y/HTwDfGUNt5+VnY0P"
                     }
                 });
-                console.log(response_internal)
+               
                 if (response_internal.status === 200) {
                     toast.success('Internal Matching succeeded.')
                 } else {

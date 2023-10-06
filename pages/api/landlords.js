@@ -11,14 +11,23 @@ export default async function handler(req, res) {
                 //Adding the / g will mean that all of the matching values are replaced.  
                 qry = interpolate(/{table}/g, queries.matched_landlords_by_customer, req.query.table)
             } else {
-                qry = queries.landlords_by_assistant
+                qry = queries.landlords_by_city
             }
             const vals = req.query.values
-            const response = await excuteQuery({
+            if (vals === 'Vancouver' || vals === 'Burnaby' || vals === 'Richmond' || vals === 'Surrey' || vals === 'Coquitlam') {
+                const response = await excuteQuery({
                 query: qry,
                 values: vals
-            })
-            return res.status(200).json(response)
+                })
+                return res.status(200).json(response)
+            } else{
+                const response = await excuteQuery({
+                    query: `SELECT * FROM landlord WHERE listingCity <> 'Vancouver' AND listingCity <> 'Burnaby' AND listingCity <> 'Richmond' AND listingCity <> 'Surrey' AND listingCity <> 'Coquitlam'`,
+                    values:[]
+                    })
+                    return res.status(200).json(response)
+            }
+            
         } catch (err) {
             console.log(err.message)
             return res.status(err.statusCode).json(err.message)

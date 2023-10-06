@@ -8,8 +8,8 @@ const Textarea = ({ value, label, name, placeholder, onChange }) => (
                 name={name}
                 rows="4"
                 cols="60"
-                minlength="0"
-                maxlength="200"
+                minLength="0"
+                maxLength="200"
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}

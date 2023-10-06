@@ -144,8 +144,7 @@ export const StaticContext = ({ children }) => {
         "4": "4个月到半年",
         "5": "短租三个月",
         "6": "短租一个月",
-        "7": "短租一周",
-        
+        "7": "短租一周"       
     }
 
     const customerCatogary = [
@@ -166,8 +165,6 @@ export const StaticContext = ({ children }) => {
         "White Rock": "old_surrey_match"
     }
 
-
-
     const internalCityTables = {
         "Vancouver": "old_internal_vancouver_match",
         "Burnaby": "old_internal_burnaby_match",
@@ -176,6 +173,8 @@ export const StaticContext = ({ children }) => {
         "Surrey": "old_internal_surrey_match",
         "South Surrey": "old_internal_surrey_match"
     }
+ 
+    const citys =['Vancouver','Burnaby', 'Richmond','Surrey', 'Coquitlam', 'Other City']
 
     return (
         <StatContext.Provider value={{
@@ -195,7 +194,8 @@ export const StaticContext = ({ children }) => {
             options_houseType,
             options_status,
             options_tenantNum,
-            options_rentDuration
+            options_rentDuration,
+            citys
         }}
         >
             {children}

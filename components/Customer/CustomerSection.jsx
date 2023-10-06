@@ -58,7 +58,16 @@ const CustomerSection = ({ section, customerList, scrollToCustomerDetail }) => {
                     return customer
                 }
             })
-            setFilteredCustomers(tempList_short_rent)
+            //LIN59 only show renters who's rentdate is not passed
+            const tempList_short_rent_rentDate_notPassed = tempList_short_rent.filter((customer) => {
+                const today = new Date()
+                const rentDate = new Date(customer.rent_date)
+                if (rentDate > today) {
+                    return customer
+                }
+            })
+           
+            setFilteredCustomers(tempList_short_rent_rentDate_notPassed)
 
         } else if (value === "pending") {
             //order by price from high to low and then based on urgency: most urgent to least.

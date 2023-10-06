@@ -2,11 +2,12 @@ import React from 'react';
 
 import { LandlordSection } from "..";
 import { useStateContext } from "../../context/StateContext";
+import { useStaticContext } from "../../context/StaticContext"
 
 const Landlords = () => {
-    const { currentCustomer, developers } = useStateContext()
-
-    return (
+    const { currentCustomer, developers} = useStateContext()
+    const { citys } = useStaticContext()
+    return (   
         <div>
             {currentCustomer &&
             <div className="module-container">
@@ -15,8 +16,8 @@ const Landlords = () => {
                         {"Developed Landlords "}  
                     </h4>
                 </div>
-                {
-                    developers.map((item) => <LandlordSection key={`landlord-by-${item}`} developer={item} />)
+                { citys.map((item) =>
+                 <LandlordSection key={`landlord-by-${item}`} city={item} />)
                 }
             </div>
             }

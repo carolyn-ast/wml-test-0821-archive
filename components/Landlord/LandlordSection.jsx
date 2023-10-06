@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { useStateContext } from "../../context/StateContext";
 import { useStaticContext } from '../../context/StaticContext';
 
-const LandlordSection = ({ developer }) => {
+const LandlordSection = ({ city }) => {
     const [index, setIndex] = useState(0)
     const { currentCustomer, ifLandlordMatched, getMatchedLandlords } = useStateContext()
     const { internalCityTables } = useStaticContext()
@@ -82,8 +82,8 @@ const LandlordSection = ({ developer }) => {
     }
 
     const getLandlords = async() => {
-        const values = [ developer ]
-    
+        const values = [ city ]
+        
         const response = await fetch(`/api/landlords?values=${values}`, {
             method: 'GET',
             headers: {
@@ -93,11 +93,11 @@ const LandlordSection = ({ developer }) => {
 
         if (response.status === 200){
             const data = await response.json()
-            
             const landlordsData = JSON.parse(JSON.stringify(data))
 
             if (!data.error) {
                 setLandlordList(landlordsData)
+    
                 setIndex(0)
             } else {
                 toast.error(`Failed to fetch the developed landlords from the database. Please contact the technical team or try agian later.`)
@@ -119,7 +119,7 @@ const LandlordSection = ({ developer }) => {
             <div>
                 <div className="title title-with-object">
                     <h5>
-                        {`${developer} `}
+                        {`${city} `}
                         <Button variant="outline-success" size="sm" onClick={getLandlords}>
                             <BsArrowRepeat />
                         </Button>
