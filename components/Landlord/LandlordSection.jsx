@@ -4,16 +4,23 @@ import { BsChevronDoubleLeft, BsChevronDoubleRight, BsArrowRepeat } from "react-
 import { Button, Card} from 'react-bootstrap';
 import { toast } from 'react-hot-toast';
 import dayjs from 'dayjs';
-
+import {
+    signIn,
+    useSession,
+    getSession
+} from 'next-auth/react';
 import { useStateContext } from "../../context/StateContext";
 import { useStaticContext } from '../../context/StaticContext';
 
 const LandlordSection = ({ city }) => {
+    //const { data: session } = useSession()
     const [index, setIndex] = useState(0)
-    const { currentCustomer, ifLandlordMatched, getMatchedLandlords } = useStateContext()
-    const { internalCityTables } = useStaticContext()
+    const { currentCustomer, ifLandlordMatched, getMatchedLandlords, unique_internal } = useStateContext()
+    const { internalCityTables, users } = useStaticContext()
     const [landlordList, setLandlordList] = useState([])
-
+    const current_user = users["chtecdev200@gmail.com"]
+    //const current_user =users[session.user.email]
+    
     const previous = () => {
         if (index === 0) {
             return;
@@ -94,10 +101,15 @@ const LandlordSection = ({ city }) => {
         if (response.status === 200){
             const data = await response.json()
             const landlordsData = JSON.parse(JSON.stringify(data))
-
+            
+            const landlord_by_user = landlordsData.filter((lan) => {
+                if (lan.listing_developer.includes('carroll') || lan.listing_developer === { current_user }) {
+                    return lan
+                }
+            })
+            
             if (!data.error) {
-                setLandlordList(landlordsData)
-    
+                setLandlordList(unique_internal(landlord_by_user))
                 setIndex(0)
             } else {
                 toast.error(`Failed to fetch the developed landlords from the database. Please contact the technical team or try agian later.`)

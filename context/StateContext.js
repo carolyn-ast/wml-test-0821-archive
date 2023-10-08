@@ -1,16 +1,28 @@
 import React, { createContext, useContext, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import dayjs from 'dayjs';
-import { timezoneFormatter} from '../lib/timezone_utils';
+import { timezoneFormatter } from '../lib/timezone_utils';
+import {
+    signIn,
+    useSession,
+    getSession
+} from 'next-auth/react';
+import { useStaticContext } from '../context/StaticContext';
 const Context = createContext();
 
 export const StateContext = ({ children }) => {
+    //const { data: session } = useSession()
+    const { users } = useStaticContext()
+    const current_user = users["chtecdev200@gmail.com"]
+    const [landlordByUser, setLandlordByUser] = useState([])
+    //const current_user =users[session.user.email]
     // customers
     const [customers, setCustomers] = useState([])
     const [currentCustomer, setCurrentCustomer] = useState()
     const [filteredCustomersByID, setFilteredCustomersByID] = useState([])
     const [filteredCustomersByEmail, setFilteredCustomersByEmail] = useState([])
     const [filteredCustomersByWechat, setFilteredCustomersByWechat] = useState([])
+    const [filteredLandlordByDesc, setFilteredLandlordByDesc] = useState([])
     // internal landlords
     const [matchedLandlords, setMatchedLandlords] = useState([])
     // external landlords
@@ -267,6 +279,37 @@ export const StateContext = ({ children }) => {
         }
     }
 
+    const getLandlordsByUser = async(user) => {
+        const values = [ user ]
+        
+        const response = await fetch(`/api/landlords?user=${values}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+
+        if (response.status === 200){
+            const data = await response.json()
+            const landlordsData = JSON.parse(JSON.stringify(data))
+            
+            const landlord_by_user = landlordsData.filter((lan) => {
+                if (lan.listing_developer === 'carroll' || lan.listing_developer === { current_user }) {
+                    return lan
+                }
+            })
+            
+            if (!data.error) {
+                setLandlordByUser(unique_internal(landlord_by_user))
+                
+            } else {
+                toast.error(`Failed to fetch the developed landlords from the database. Please contact the technical team or try agian later.`)
+            }
+        } else {
+            toast.error(`Failed to fetch the developed landlords from the server side. Please contact the technical team or try again later.`)
+        }
+    }
+
     const handleLandlordUpdate = async(table, updateItems, landlord, listingId) => {
         if (updateItems.length === 0) {
             return
@@ -391,7 +434,13 @@ export const StateContext = ({ children }) => {
             showProfile,
             setShowProfile,
             developers,
-            setDevelopers
+            setDevelopers,
+            unique_internal,
+            filteredLandlordByDesc,
+            setFilteredLandlordByDesc,
+            landlordByUser,
+            setLandlordByUser,
+            getLandlordsByUser
         }}
         >
             {children}

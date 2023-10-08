@@ -176,6 +176,12 @@ export const StaticContext = ({ children }) => {
  
     const citys =['Vancouver','Burnaby', 'Richmond','Surrey', 'Coquitlam', 'Other City']
 
+    const users = {
+        "chtecdev200@gmail.com": "Carroll",
+        "diao.xc@gmail.com": "Jacqueline",
+        "yvrlinli@gmail.com" :"Jacqueline"
+    }
+
     return (
         <StatContext.Provider value={{
             detailList,
@@ -195,7 +201,8 @@ export const StaticContext = ({ children }) => {
             options_status,
             options_tenantNum,
             options_rentDuration,
-            citys
+            citys,
+            users
         }}
         >
             {children}

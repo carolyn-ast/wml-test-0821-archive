@@ -3,9 +3,11 @@ import React from 'react';
 import { LandlordSection } from "..";
 import { useStateContext } from "../../context/StateContext";
 import { useStaticContext } from "../../context/StaticContext"
+import SearchLandlordButton from '../SearchLandlordButton';
+import SearchedLandlord from './SearchedLandlord';
 
 const Landlords = () => {
-    const { currentCustomer, developers} = useStateContext()
+    const { currentCustomer, developers, filteredLandlordByDesc} = useStateContext()
     const { citys } = useStaticContext()
     return (   
         <div>
@@ -15,7 +17,15 @@ const Landlords = () => {
                     <h4>
                         {"Developed Landlords "}  
                     </h4>
-                </div>
+                    </div>
+                    <div >
+                   <SearchLandlordButton />
+                   {filteredLandlordByDesc.length !== 0 && 
+                       <div> 
+                       <SearchedLandlord />
+                    </div>     
+                   }
+               </div>
                 { citys.map((item) =>
                  <LandlordSection key={`landlord-by-${item}`} city={item} />)
                 }

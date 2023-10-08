@@ -3,8 +3,19 @@ import { interpolate, queryFormatter } from "../../lib/utils";
 import { queries } from "../../lib/resource";
 
 export default async function handler(req, res) {
+    
     if (req.method === "GET") {
         try {
+             //get landlord list by user
+            const user = req.query.user
+            if (user) {
+                const response = await excuteQuery({
+                    query: `SELECT * FROM landlord WHERE listing_developer = '${user}'`,
+                    values: []
+                    })
+                    return res.status(200).json(response) 
+            }
+
             var qry = ""
             if (req.query.table) {
                 //by default string.replace in JavaScript will only replace the first matching value it finds. 
@@ -13,6 +24,7 @@ export default async function handler(req, res) {
             } else {
                 qry = queries.landlords_by_city
             }
+            //get landlord list by city
             const vals = req.query.values
             if (vals === 'Vancouver' || vals === 'Burnaby' || vals === 'Richmond' || vals === 'Surrey' || vals === 'Coquitlam') {
                 const response = await excuteQuery({
