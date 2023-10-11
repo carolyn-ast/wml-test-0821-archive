@@ -107,25 +107,26 @@ const SearchedLandlord = () => {
                 </div>
                 
                 <div className="landlord-list-container">
-                    <div className='landlord-display-container'>
+                        <div className='landlord-display-container'>
                         <Card className='landlord-list-item'>
                             <Card.Body>
-                                <Card.Title>Rent date</Card.Title>
-                                <Card.Text>{dayjs(filteredLandlordByDesc[index].listing_rent_date).format('YYYY-MM-DD')}</Card.Text>
+                                <Card.Title>Listing City</Card.Title>
+                                <Card.Text>{filteredLandlordByDesc[index].listingCity}</Card.Text>
                             </Card.Body>
-                        </Card>
+                            </Card>
                         <Card className='landlord-list-item'>
                             <Card.Body>
                                 <Card.Title>Listing Address</Card.Title>
                                 <Card.Text>{filteredLandlordByDesc[index].listingAdd}</Card.Text>
                             </Card.Body>
                             </Card>
-                            <Card className='landlord-list-item'>
+                        <Card className='landlord-list-item'>
                             <Card.Body>
-                                <Card.Title>Listing Address</Card.Title>
-                                <Card.Text>{filteredLandlordByDesc[index].listing_describe}</Card.Text>
+                                <Card.Title>Rent date</Card.Title>
+                                <Card.Text>{dayjs(filteredLandlordByDesc[index].listing_rent_date).format('YYYY-MM-DD')}</Card.Text>
                             </Card.Body>
                         </Card>
+                        
                         <Card className='landlord-list-item'>
                             <Card.Body>
                                 <Card.Title>Listing Price</Card.Title>
@@ -136,6 +137,53 @@ const SearchedLandlord = () => {
                             <Card.Body>
                                 <Card.Title>Phone</Card.Title>
                                 <Card.Text>{filteredLandlordByDesc[index].listingTel}</Card.Text>
+                            </Card.Body>
+                            </Card>
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Listing Decribtion</Card.Title>
+                                <Card.Text>{filteredLandlordByDesc[index].listing_describe}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                
+                        {filteredLandlordByDesc[index].Rent_note && 
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Commission</Card.Title>
+                                <Card.Text>NO</Card.Text>
+                            </Card.Body>
+                        </Card>
+                        }  
+                        {filteredLandlordByDesc[index].Rent_note && 
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Commission Note</Card.Title>
+                                <Card.Text>{filteredLandlordByDesc[index].Rent_note}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                        }
+                              
+                        {!filteredLandlordByDesc[index].Rent_note && 
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Commission</Card.Title>
+                                <Card.Text>YES</Card.Text>
+                            </Card.Body>
+                                        
+                        </Card>
+                        }       
+                        {!filteredLandlordByDesc[index].Rent_note && 
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Commission Note</Card.Title>
+                                <Card.Text>10 days rental as commission</Card.Text>
+                            </Card.Body>
+                        </Card>
+                        }         
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>Listing ID</Card.Title>
+                                <Card.Text>{filteredLandlordByDesc[index].listing_id}</Card.Text>
                             </Card.Body>
                         </Card>
                         {filteredLandlordByDesc[index].listingUrl && 
