@@ -17,11 +17,11 @@ const Landlords = () => {
                     <h4>
                         {"Developed Landlords "}  
                     </h4>
-                    </div>
-                    <div >
+                </div>
+                <div >
                    <SearchLandlordButton />
                    {filteredLandlordByDesc.length !== 0 && 
-                       <div> 
+                    <div> 
                        <SearchedLandlord />
                     </div>     
                    }

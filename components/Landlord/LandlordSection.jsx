@@ -91,7 +91,7 @@ const LandlordSection = ({ city }) => {
     const getLandlords = async() => {
         const values = [ city ]
         
-        const response = await fetch(`/api/landlords?values=${values}`, {
+        const response = await fetch(`/api/landlords?citys=${values}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
