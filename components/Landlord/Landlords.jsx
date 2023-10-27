@@ -12,14 +12,17 @@ const Landlords = () => {
     return (   
         <div>
             {currentCustomer &&
-            <div className="module-container">
+            <div className="module-container " >
                 <div className="title title-with-object">
                     <h4>
                         {"Developed Landlords "}  
                     </h4>
                 </div>
-                <div >
-                   <SearchLandlordButton />
+                    <div >
+                        <div className="search-landlord-section">
+                        <SearchLandlordButton />
+                        </div>
+                   
                    {filteredLandlordByDesc.length !== 0 && 
                     <div> 
                        <SearchedLandlord />

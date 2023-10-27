@@ -15,7 +15,7 @@ const SearchLandlordButton = () => {
     //const current_user =users[session.user.email]
     const { getLandlordsByUser, landlordByUser, setFilteredLandlordByDesc } = useStateContext()
     //get landlord list by current user
-    getLandlordsByUser(current_user)
+    getLandlordsByUser('')
     
    const [searchBarKeyCode, setSearchBarKeyCode]= useState('13')
     

@@ -75,9 +75,15 @@ margin-right: 100px;
 }
 
 .module-container{
+  position: relative;
   max-width: 100%;
   margin: 1.0rem;
   padding: 1.2rem;
+}
+.search-landlord-section{
+  position: absolute;
+  left:16rem;
+  top: 2.2rem; 
 }
 
 .title{

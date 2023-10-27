@@ -6,6 +6,13 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
         try {
             var qry = ""
+            if (req.query.user=== '') {
+                const response = await excuteQuery({
+                    query: `SELECT * FROM landlord`,
+                    values: []
+                    })
+                    return res.status(200).json(response) 
+            }
             if (req.query.user) {
                 const response = await excuteQuery({
                     query: `SELECT * FROM landlord WHERE listing_developer = '${req.query.user}'`,
@@ -82,11 +89,19 @@ export default async function handler(req, res) {
         }
     } else if (req.method === "DELETE") {
         try {
-            const qry = interpolate(/{table}/g, queries.delete_landlords, req.query.table)
-            const response = await excuteQuery({
+         if ( req.query.url) {
+             const qry = interpolate(/{table}/g, queries.delete_matched_landlords, req.query.table)
+                const response = await excuteQuery({
                 query: qry,
-                values: [req.query.customer]
+                values:  [req.query.customer, req.query.url]
             })
+            return res.status(200).json(response)
+            }
+            //  qry = interpolate(/{table}/g, queries.delete_landlords, req.query.table)
+            // const response = await excuteQuery({
+            //     query: qry,
+            //     values: [req.query.customer]
+            // })
             return res.status(200).json(response)
         } catch (err) {
             console.log(err.message)

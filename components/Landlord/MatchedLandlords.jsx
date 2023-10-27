@@ -18,7 +18,7 @@ const MatchedLandlords = () => {
     const { internalCityTables } = useStaticContext()
     const [updateItems, setUpdateItems] = useState({})
     const [internalStatus, setinternalStatus] = useState()
-    const status=useRef()
+    //const status=useRef()
     const [customerStatus, setCustomerStatus] = useState(false)
   
     // 请求下一条 could be removed, it is not updated in database
@@ -68,7 +68,7 @@ const MatchedLandlords = () => {
 
     const handleOptionChange = (e) => {
         setinternalStatus(e.target.name)
-        status.current=e.target.name
+        //status.current=e.target.name
             setUpdateItems({
                 ...updateItems,
                 ['note']: e.target.name,

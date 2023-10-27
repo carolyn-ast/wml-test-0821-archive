@@ -279,34 +279,58 @@ export const StateContext = ({ children }) => {
         }
     }
 
-    const getLandlordsByUser = async(user) => {
-        const values = [ user ]
-        
-        const response = await fetch(`/api/landlords?user=${values}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-
-        if (response.status === 200){
-            const data = await response.json()
-            const landlordsData = JSON.parse(JSON.stringify(data))
-            
-            const landlord_by_user = landlordsData.filter((lan) => {
-                if (lan.listing_developer === 'carroll' || lan.listing_developer === { current_user }) {
-                    return lan
+    const getLandlordsByUser = async (user) => {
+        if (user) {
+            const values = [user]
+            const response = await fetch(`/api/landlords?user=${values}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
                 }
             })
+
+            if (response.status === 200) {
+                const data = await response.json()
+                const landlordsData = JSON.parse(JSON.stringify(data))
             
-            if (!data.error) {
-                setLandlordByUser(unique_internal(landlord_by_user))
+                const landlord_by_user = landlordsData.filter((lan) => {
+                    if (lan.listing_developer === 'carroll' || lan.listing_developer === { current_user }) {
+                        return lan
+                    }
+                })
+            
+                if (!data.error) {
+                    setLandlordByUser(unique_internal(landlord_by_user))
                 
+                } else {
+                    toast.error(`Failed to fetch the developed landlords from the database. Please contact the technical team or try agian later.`)
+                }
             } else {
-                toast.error(`Failed to fetch the developed landlords from the database. Please contact the technical team or try agian later.`)
+                toast.error(`Failed to fetch the developed landlords from the server side. Please contact the technical team or try again later.`)
             }
-        } else {
-            toast.error(`Failed to fetch the developed landlords from the server side. Please contact the technical team or try again later.`)
+        }
+        if (user==='') {
+            const values = [user]
+            const response = await fetch(`/api/landlords?user=${values}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+
+            if (response.status === 200) {
+                const data = await response.json()
+                const landlordsData = JSON.parse(JSON.stringify(data))
+
+                if (!data.error) {
+                    setLandlordByUser(unique_internal(landlordsData))
+                
+                } else {
+                    toast.error(`Failed to fetch the developed landlords from the database. Please contact the technical team or try agian later.`)
+                }
+            } else {
+                toast.error(`Failed to fetch the developed landlords from the server side. Please contact the technical team or try again later.`)
+            }
         }
     }
 
@@ -322,14 +346,14 @@ export const StateContext = ({ children }) => {
         } else {
             vals = [...vals, landlord.listingAdd]
         }
-
+console.log(vals)
         const reqBody = {
             listingId: listingId,
             table: table,
             values: vals,
             updateItems: updateItems
         }
-        
+     
         const response = await fetch("/api/landlords", {
             method: 'PUT',
             headers: {
@@ -340,6 +364,7 @@ export const StateContext = ({ children }) => {
         
         if (response.status === 200){
             const data = await response.json()
+            console.log(data)
             if (!data.error) {
                 toast.success('Successfully updated the landlord note')
                 if (listingId) {
@@ -378,8 +403,8 @@ export const StateContext = ({ children }) => {
         setNewHouses(updatedLandlords)
     }
 
-    const removeMatchedLandlords = async(table) => {
-        const response = await fetch(`/api/landlords?table=${table}&customer=${currentCustomer.UserId}`, {
+    const removeMatchedLandlords = async(table, url) => {
+        const response = await fetch(`/api/landlords?table=${table}&customer=${currentCustomer.UserId}&url=${url}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
