@@ -79,6 +79,16 @@ const SearchedLandlord = () => {
         }
     }
 
+    const toInternalPage = () => {
+        const idEnc = filteredLandlordByDesc[index].listing_id ? btoa(filteredLandlordByDesc[index].listing_id) : ''
+        const equal = idEnc.match(/(=)/)
+        const idUrl = equal ? idEnc.substring(0, equal.index) + equal.length : idEnc + '0'
+        console.log(filteredLandlordByDesc[index])
+        window.open(
+            'http://119.3.241.33:8004/showcase/' + idUrl,      
+            '_blank' )  
+    }
+
     useEffect(() => {
         if (currentCustomer) {
            
@@ -184,6 +194,14 @@ const SearchedLandlord = () => {
                             <Card.Body>
                                 <Card.Title>Listing ID</Card.Title>
                                 <Card.Text>{filteredLandlordByDesc[index].listing_id}</Card.Text>
+                            </Card.Body>
+                            </Card>
+                        <Card className='landlord-list-item'>
+                        <Card.Body>
+                                <Card.Title>LINLI Internal Link</Card.Title>
+                                <Card.Text>
+                                <button className='internalLinkBTN' onClick={toInternalPage}>Go To The LINLI Internal Page</button>
+                                </Card.Text>
                             </Card.Body>
                         </Card>
                         {filteredLandlordByDesc[index].listingUrl && 

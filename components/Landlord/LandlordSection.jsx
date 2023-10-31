@@ -119,6 +119,16 @@ const LandlordSection = ({ city }) => {
         }
     }
 
+    const toInternalPage = () => {
+        const idEnc = landlordList[index].listing_id ? btoa(landlordList[index].listing_id) : ''
+        const equal = idEnc.match(/(=)/)
+        const idUrl = equal ? idEnc.substring(0, equal.index) + equal.length : idEnc + '0'
+        console.log(landlordList[index])
+        window.open(
+            'http://119.3.241.33:8004/showcase/' + idUrl,      
+            '_blank' )  
+    }
+
     useEffect(() => {
         if (currentCustomer) {
             getLandlords()
@@ -184,7 +194,15 @@ const LandlordSection = ({ city }) => {
                                 </Card.Text>
                             </Card.Body>
                         </Card>
-                        }
+                            }              
+                        <Card className='landlord-list-item'>
+                             <Card.Body>
+                                <Card.Title>LINLI Internal Link</Card.Title>
+                                <Card.Text>
+                                <button className='internalLinkBTN' onClick={toInternalPage}>Go To The LINLI Internal Page</button>
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
                     </div>
                     { !ifLandlordMatched(landlordList[index]) &&
                         <div className="submit-button-block">

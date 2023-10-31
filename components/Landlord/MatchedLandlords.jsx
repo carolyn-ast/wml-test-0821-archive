@@ -18,8 +18,6 @@ const MatchedLandlords = () => {
     const { internalCityTables } = useStaticContext()
     const [updateItems, setUpdateItems] = useState({})
     const [internalStatus, setinternalStatus] = useState()
-    //const status=useRef()
-    const [customerStatus, setCustomerStatus] = useState(false)
   
     // 请求下一条 could be removed, it is not updated in database
     const statusSelection = {
@@ -74,6 +72,16 @@ const MatchedLandlords = () => {
                 ['note']: e.target.name,
                 ['LastUpdatetime']:timezoneFormatter( dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'))
             })
+    }
+
+    const toInternalPage = () => {
+        const idEnc = matchedLandlords[index].id ? btoa(matchedLandlords[index].Listing_id) : ''
+        const equal = idEnc.match(/(=)/)
+        const idUrl = equal ? idEnc.substring(0, equal.index) + equal.length : idEnc + '0'
+        console.log(matchedLandlords[index])
+        // window.open(
+        //     'http://119.3.241.33:8004/showcase/' + idUrl,      
+        //     '_blank' )  
     }
 
     useEffect(() => {
@@ -194,6 +202,15 @@ const MatchedLandlords = () => {
                             </Card.Body>
                         </Card>
                         }
+                        <Card className='landlord-list-item'>
+                            <Card.Body>
+                                <Card.Title>LINLI Internal Link</Card.Title>
+                                <Card.Text>
+                                {/* <Link href={'http://119.3.241.33:8004/showcase/' + matchedLandlords[index].id} target ="_blank">Click to go to the LINLI internal page</Link> */}
+                                <button className='internalLinkBTN' onClick={toInternalPage}>Go To The LINLI Internal Page</button>
+                                </Card.Text>
+                            </Card.Body>
+                        </Card> 
                         {matchedLandlords[index].listing_describe && 
                         <Card className='landlord-list-item'>
                             <Card.Body>
