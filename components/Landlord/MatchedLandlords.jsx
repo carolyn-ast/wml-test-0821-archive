@@ -202,21 +202,21 @@ const MatchedLandlords = () => {
                             </Card.Body>
                         </Card>
                         }
-                        <Card className='landlord-list-item'>
+                        {/* <Card className='landlord-list-item'>
                             <Card.Body>
                                 <Card.Title>LINLI Internal Link</Card.Title>
                                 <Card.Text>
-                                {/* <Link href={'http://119.3.241.33:8004/showcase/' + matchedLandlords[index].id} target ="_blank">Click to go to the LINLI internal page</Link> */}
                                 <button className='internalLinkBTN' onClick={toInternalPage}>Go To The LINLI Internal Page</button>
                                 </Card.Text>
                             </Card.Body>
-                        </Card> 
+                        </Card>  */}
                         {matchedLandlords[index].listing_describe && 
                         <Card className='landlord-list-item'>
                             <Card.Body>
                                 <Card.Title>Listing Description</Card.Title>
-                                <Card.Text>
-                                {matchedLandlords[index].listing_describe}
+                                            <Card.Text>
+                                            <div dangerouslySetInnerHTML={{__html: matchedLandlords[index].listing_describe || <></>}}></div>
+                                {/* {matchedLandlords[index].listing_describe} */}
                                 </Card.Text>
                             </Card.Body>
                         </Card>

@@ -101,13 +101,13 @@ const LandlordSection = ({ city }) => {
         if (response.status === 200){
             const data = await response.json()
             const landlordsData = JSON.parse(JSON.stringify(data))
-            
+            //console.log(landlordsData)
             const landlord_by_user = landlordsData.filter((lan) => {
                 if (lan.listing_developer.includes('carroll') || lan.listing_developer === { current_user }) {
                     return lan
                 }
             })
-            
+            //console.log(landlord_by_user)
             if (!data.error) {
                 setLandlordList(unique_internal(landlord_by_user))
                 setIndex(0)

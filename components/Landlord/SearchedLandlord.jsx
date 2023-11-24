@@ -152,7 +152,10 @@ const SearchedLandlord = () => {
                         <Card className='landlord-list-item'>
                             <Card.Body>
                                 <Card.Title>Listing Decribtion</Card.Title>
-                                <Card.Text>{filteredLandlordByDesc[index].listing_describe}</Card.Text>
+                                    <Card.Text>
+                                    <div dangerouslySetInnerHTML={{__html: filteredLandlordByDesc[index].listing_describe || <></>}}></div>
+                                        {/* {filteredLandlordByDesc[index].listing_describe} */}
+                                    </Card.Text>
                             </Card.Body>
                         </Card>
                 
