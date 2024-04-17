@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef} from 'react';
 import Button from 'react-bootstrap/Button';
-
+import Link from 'next/link';
 import { useStateContext } from '../../context/StateContext';
 import { useStaticContext } from '../../context/StaticContext';
 import InputField from '../InputField';
@@ -98,7 +98,7 @@ const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
                                                 <DropDown label={value} options={options_houseType} name={key} value={customer[key]} onChange={handleChange}></DropDown>
                                             )
                                             :
-                                            key === '是否有宠物' ?
+                                            key === 'Pet' ?
                                             (
                                                 <DropDown label={value} options={options_pet} name={key} value={customer[key]} onChange={handleChange}></DropDown>
                                             )
@@ -113,7 +113,7 @@ const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
                                                 <DropDown label={value} options={options_furniture} name={key} value={customer[key]} onChange={handleChange}></DropDown>
                                             )
                                             :
-                                            key === '车位' ?
+                                            key === 'Parking' ?
                                             (
                                                 <DropDown label={value} options={options_parking} name={key} value={customer[key]} onChange={handleChange}></DropDown>
                                             )
@@ -133,7 +133,7 @@ const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
                                                 <DropDown label={value} options={options_status} name={key} value={customer[key]} onChange={handleChange}></DropDown>
                                             )
                                             :
-                                            key === '几人入住？' ?
+                                            key === 'tenants_num' ?
                                             (
                                                 <DropDown label={value} options={options_tenantNum} name={key} value={customer[key]} onChange={handleChange}></DropDown>
                                             )
@@ -141,6 +141,10 @@ const CustomerDetail = React.forwardRef(({scrollToCustomerDetail}, ref) => {
                                             key === 'rent_duration' ?
                                             (
                                                 <DropDown label={value} options={options_rentDuration} name={key} value={customer[key]} onChange={handleChange}></DropDown>
+                                            ):
+                                            key === 'recommend_url' ?
+                                            (<Link href={customer[key]} target = "_blank">Click to go to Linli recommend page</Link>
+                                                
                                             )
                                          
                                             :

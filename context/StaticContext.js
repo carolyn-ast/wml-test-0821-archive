@@ -5,10 +5,11 @@ const StatContext = createContext();
 export const StaticContext = ({ children }) => {
 
     const detailList = {
+        
         "Submission_Date": "Submission Date",
         "LastUpdateTime": "Last Update Time",
-        "名": "First Name",
-        "姓": "Last Name",
+        "FirstName": "First Name",
+        "LastName": "Last Name",
         "UserId":'UserId',
         "mail": "Email",
         "wechat_name": "Wechat Name",
@@ -16,25 +17,26 @@ export const StaticContext = ({ children }) => {
         
         // missing address in db
         // missing phone in db
-        "请填写您的目的地邮编，更好获得附近邻里的帮助": "Postal Code",
+        "PostalCode": "Postal Code",
         "City": "Target City",
-        "如下哪些方面需要我们的帮助？":"Need Help With",
+        "need_help_with":"Need Help With",
         "Budget_price": "Budget",
         "rent_type": "Rent Type",
         "rent_date": "Wish To Rent From",
         "rent_duration": "Rent Duration",
-        "几人入住？": "Tenants Number",
+        "tenants_num": "Tenants Number",
         "house_type": "House Type",
         "semi_underground": "Underground Acceptance",
         "room_type": "Room Type",
-        "是否有宠物": "Pets Allowed",
+        "Pet": "Pets Allowed",
         "Kitchen": "Kitchen",
         "Furniture": "Furniture",
-        "车位": "Parking",
+        "Parking": "Parking",
         "Assistant_name": "Assistant",
         "rent_status":'Rent Status',
         "Leasing_demand": "Leasing Demand",
-        "Assistant_message": "Message for Assistant"
+        "Assistant_message": "Message for Assistant",
+        "recommend_url": "Linli recommend URL",
        
     }
 

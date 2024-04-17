@@ -7,7 +7,7 @@ import {
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-hot-toast';
-
+import copy from 'clipboard-copy';
 import { CustomerContainer, CustomerDetail, Landlords, MatchedLandlords, NewHouses, InputField } from '../../components';
 import excuteQuery from '../../lib/db';
 import { useStateContext } from '../../context/StateContext';
@@ -15,21 +15,31 @@ import { useStateContext } from '../../context/StateContext';
 const AssistantHome = ({ customerList, user, developers }) => {
     //const { data: session } = useSession()
 
-    const { setCustomers, setFilteredCustomersByID,setFilteredCustomersByEmail,setFilteredCustomersByWechat, showProfile, setShowProfile, setDevelopers } = useStateContext()
+        const { setCustomers, setFilteredCustomersByID,setFilteredCustomersByEmail,setFilteredCustomersByWechat, showProfile, setShowProfile, setDevelopers, generateLinkPage, setGenerateLinkPage,copied, setCopied} = useStateContext()
     const customerDetailRef = useRef(null)
     const [scrollToCustomerDetail, setScrollToCustomerDetail] = useState(false)
     const [updateItems, setUpdateItems] = useState({})
     const [tempAssistant, setTempAssistant] = useState(user)
     const [assistant, setAssistant] = useState(user)
-
+    const [companyName, setCompanyName] = useState('');
+    const [referralPeople, setReferralPeople] = useState('');
+    const [socialMedia, setSocialMedia] = useState('');
+    const [referralCode, setReferralCode] = useState('');
+    const [rentalRequirementLink, setRentalRequirementLink] = useState('');
+ 
     const handleScrollToCustomerDetail = () => {
         setScrollToCustomerDetail(true)
     }
 
     const handleProfileClose = () => {
         setShowProfile(false)
-        setTempAssistant(assistant)
+        // setTempAssistant(tempAssistant)
     }
+
+    const handleLinkPageClose = () => {
+        setGenerateLinkPage(false)
+    }
+
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -68,6 +78,33 @@ const AssistantHome = ({ customerList, user, developers }) => {
             toast.error(`Failed to update your profile on the server side. Error code: (${response.status}), Please try again later.`)
         }
         setUpdateItems({})
+    }
+
+    // const copyToClipboard = () => {
+    //     navigator.clipboard.writeText(rentalRequirementLink);
+    //     setCopied(true);
+    // };
+   
+const copyToClipboard = () => {
+    copy(rentalRequirementLink)
+      .then(() => {
+        // 复制成功后的逻辑
+        console.log('Link copied to clipboard');
+        setCopied(true);
+      })
+      .catch((error) => {
+        // 复制失败后的逻辑
+        console.error('Failed to copy link to clipboard:', error);
+      });
+};
+
+    const generateLink = () => {
+        //测试版本没有session
+        // const link = `http://119.3.241.33:8006/?company=${companyName}&referralPeople=${referralPeople}&socialmedia=${socialMedia}&assistant=${session.user.email}&referralCode=${referralCode}`;
+
+        const link = `http://119.3.241.33:8006/?company=${companyName}&referralPeople=${referralPeople}&socialmedia=${socialMedia}&assistant=‘’&referralCode=${referralCode}`;
+        setRentalRequirementLink(link)
+        setCopied(false);
     }
 
     useEffect(() => {
@@ -126,6 +163,7 @@ const AssistantHome = ({ customerList, user, developers }) => {
                             key="formal_name"
                         />
                     </Modal.Body>
+
                     <Modal.Footer>
                     <Button variant="success" size="sm" onClick={() => {
                         handelUpdate()
@@ -133,6 +171,66 @@ const AssistantHome = ({ customerList, user, developers }) => {
                         Save Changes
                     </Button>
                     </Modal.Footer>
+                </Modal> 
+
+<Modal show={generateLinkPage} onHide={handleLinkPageClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Generate Link</Modal.Title>
+                    </Modal.Header>
+                  
+                    <Modal.Body>
+                    <InputField 
+    type="text"
+    value={companyName}
+    placeholder="Input your company name"
+    label="Company Name"
+    name="companyName"
+    onChange={(e) => setCompanyName(e.target.value)}
+/>
+
+<InputField 
+    type="text"
+    value={referralPeople}
+    placeholder="Input referral people"
+    label="Referral People"
+    name="referralPeople"
+    onChange={(e) => setReferralPeople(e.target.value)}
+/>
+
+<InputField 
+    type="text"
+    value={socialMedia}
+    placeholder="Input social media source"
+    label="Social Media"
+    name="socialMedia"
+    onChange={(e) => setSocialMedia(e.target.value)}
+/>
+
+<InputField 
+    type="text"
+    value={referralCode}
+    placeholder="Input your referral code"
+    label="Referral Code"
+    name="referralCode"
+    onChange={(e) => setReferralCode(e.target.value)}
+/>
+
+</Modal.Body>
+
+                    <Modal.Footer>
+                      <Button variant="primary" size="sm" onClick={generateLink}>
+        Generate Link
+    </Button>
+                    </Modal.Footer>
+                    {rentalRequirementLink && (
+                    <>
+                    <p>The link for tenant requirement form:</p>
+                        <p style={{ maxWidth: '100%', overflow: 'hidden', wordWrap: 'break-word',border: '1px solid blue', padding: '5px'}}>{rentalRequirementLink}</p>
+                        <Button variant="outline-primary" size="sm" onClick={copyToClipboard}>
+                            {copied ? 'The link is copied to your clipboard!' : 'click to copy the link'}
+                        </Button>
+                    </>
+                )}
                 </Modal> 
                 <div>
                     {customerList && 
@@ -165,7 +263,7 @@ export const getServerSideProps = async(context) => {
 
     // try{
         const result = await excuteQuery({
-            query: "SELECT * FROM UserForm WHERE Assistant_name = '猫咪头' AND 如下哪些方面需要我们的帮助？ LIKE '%我是租客%' AND Assistant_message NOT LIKE '#%'",
+            query: "SELECT * FROM UserForm WHERE Assistant_name = '猫咪头' AND need_help_with LIKE '%我是租客%' AND Assistant_message NOT LIKE '#%'",
             values: []
         })
 

@@ -15,6 +15,7 @@ export const StateContext = ({ children }) => {
     const { users } = useStaticContext()
     const current_user = users["chtecdev200@gmail.com"]
     const [landlordByUser, setLandlordByUser] = useState([])
+    const [allLandlordByUser, setAllLandlordByUser] = useState([])
     //const current_user =users[session.user.email]
     // customers
     const [customers, setCustomers] = useState([])
@@ -29,6 +30,8 @@ export const StateContext = ({ children }) => {
     const [newHouses, setNewHouses] = useState([])
 
     const [showProfile, setShowProfile] = useState(false)
+    const [generateLinkPage, setGenerateLinkPage] = useState(false)
+    const [copied, setCopied] = useState(false);
     const [developers, setDevelopers] = useState([])
 
     const dayDifference = (date1, date2) => {
@@ -151,7 +154,7 @@ export const StateContext = ({ children }) => {
                     toast.error('External Matching error.')
                 }
 
-                const response_internal = await fetch(`http://119.3.241.33:3000/internal/${customer.UserId}`, {
+                const response_internal = await fetch(`http://119.3.241.33:3000/b_internal/${customer.UserId}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -282,26 +285,39 @@ export const StateContext = ({ children }) => {
     const getLandlordsByUser = async (user) => {
         if (user) {
             const values = [user]
-            const response = await fetch(`/api/landlords?user=${values}`, {
-                method: 'GET',
+            // const response = await fetch(`/api/landlords?user=${values}`, {
+            //     method: 'GET',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     }
+            // })
+
+              //equivalent to  query: `SELECT * FROM landlord WHERE dev_first_name = '${req.query.user}'`
+              const response = await fetch(`http://localhost:8081/linli/landlord/readIndexByFirstName?firstName='Carroll'`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                }
-            })
+                    "Access-Control-Allow-Origin":"*"
+                },
+            }); 
 
             if (response.status === 200) {
                 const data = await response.json()
-                const landlordsData = JSON.parse(JSON.stringify(data))
+                // const landlordsData = JSON.parse(JSON.stringify(data))
             
-                const landlord_by_user = landlordsData.filter((lan) => {
-                    if (lan.listing_developer === 'carroll' || lan.listing_developer === { current_user }) {
-                        return lan
-                    }
-                })
+                // const landlord_by_user = landlordsData.filter((lan) => {
+                //     // if (lan.listing_developer === 'carroll' || lan.listing_developer === { current_user }) {
+                //     //     return lan
+                //     // }
+                //     if (lan.devFirstName === 'carroll' || lan.listingDeveloper === { current_user }) {
+                //             return lan
+                //         }
+                // })
+                const landlord_by_user = JSON.parse(JSON.stringify(data))
             
                 if (!data.error) {
                     setLandlordByUser(unique_internal(landlord_by_user))
-                
+                    console.log(unique_internal(landlord_by_user))
                 } else {
                     toast.error(`Failed to fetch the developed landlords from the database. Please contact the technical team or try agian later.`)
                 }
@@ -310,11 +326,21 @@ export const StateContext = ({ children }) => {
             }
         }
         if (user==='') {
+            console.log('111111111111111')
             const values = [user]
-            const response = await fetch(`/api/landlords?user=${values}`, {
-                method: 'GET',
+            // const response = await fetch(`/api/landlords?user=${values}`, {
+            //     method: 'GET',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     }
+            // })
+
+             //equivalent to query: `SELECT * FROM landlord`,
+             const response = await fetch('http://localhost:8081/linli/landlord/readIndex', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Access-Control-Allow-Origin":"*"
                 }
             })
 
@@ -323,8 +349,8 @@ export const StateContext = ({ children }) => {
                 const landlordsData = JSON.parse(JSON.stringify(data))
 
                 if (!data.error) {
-                    setLandlordByUser(unique_internal(landlordsData))
-                
+                    setAllLandlordByUser(unique_internal(landlordsData))
+                    console.log(unique_internal(landlordsData))
                 } else {
                     toast.error(`Failed to fetch the developed landlords from the database. Please contact the technical team or try agian later.`)
                 }
@@ -465,7 +491,10 @@ console.log(vals)
             setFilteredLandlordByDesc,
             landlordByUser,
             setLandlordByUser,
-            getLandlordsByUser
+            getLandlordsByUser,
+            allLandlordByUser,
+            generateLinkPage, setGenerateLinkPage,
+            copied, setCopied
         }}
         >
             {children}

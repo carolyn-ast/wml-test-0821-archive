@@ -15,7 +15,7 @@ export default async function handler(req, res) {
             }
             if (req.query.user) {
                 const response = await excuteQuery({
-                    query: `SELECT * FROM landlord WHERE listing_developer = '${req.query.user}'`,
+                    query: `SELECT * FROM landlord WHERE dev_first_name = 'Carroll'`,
                     values: []
                     })
                     return res.status(200).json(response) 
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
             if (req.query.citys) {
                 const vals = req.query.citys
                 
-            if (vals === 'Vancouver' || vals === 'Burnaby' || vals === 'Richmond' || vals === 'Surrey' || vals === 'Coquitlam') {
+            if (vals.includes('ancouver') || vals.includes('urnaby') || vals.includes('ichmond') || vals.includes('urrey') || vals.includes('oquitlam')) {
                 const response = await excuteQuery({
                 query: queries.landlords_by_city,
                 values: vals

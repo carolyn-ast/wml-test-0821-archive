@@ -15,7 +15,7 @@ import { useStaticContext } from '../../context/StaticContext';
 const LandlordSection = ({ city }) => {
     //const { data: session } = useSession()
     const [index, setIndex] = useState(0)
-    const { currentCustomer, ifLandlordMatched, getMatchedLandlords, unique_internal } = useStateContext()
+    const { currentCustomer, ifLandlordMatched, getMatchedLandlords, unique_internal,landlordByUser } = useStateContext()
     const { internalCityTables, users } = useStaticContext()
     const [landlordList, setLandlordList] = useState([])
     const current_user = users["chtecdev200@gmail.com"]
@@ -88,36 +88,65 @@ const LandlordSection = ({ city }) => {
         }
     }
 
-    const getLandlords = async() => {
-        const values = [ city ]
-        
-        const response = await fetch(`/api/landlords?citys=${values}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
+    useEffect(() => {
+        const fetchData = async () => {
+            const values = [city];
+            if (values.includes('Other City')) {
+                const citiesToInclude = ['south_surrey', 'west_vancouver'];
+                const landlord_by_city = landlordByUser.filter((lan) => {
+                  const lowerCaseCity = lan.listingCity.toLowerCase();
+                 return citiesToInclude.some(city => lowerCaseCity.includes(city));
+                });
+                setLandlordList(unique_internal(landlord_by_city));
+                console.log('setLandlordList-other', unique_internal(landlord_by_city));
 
-        if (response.status === 200){
-            const data = await response.json()
-            const landlordsData = JSON.parse(JSON.stringify(data))
-            //console.log(landlordsData)
-            const landlord_by_user = landlordsData.filter((lan) => {
-                if (lan.listing_developer.includes('carroll') || lan.listing_developer === { current_user }) {
-                    return lan
-                }
-            })
-            //console.log(landlord_by_user)
-            if (!data.error) {
-                setLandlordList(unique_internal(landlord_by_user))
-                setIndex(0)
             } else {
-                toast.error(`Failed to fetch the developed landlords from the database. Please contact the technical team or try agian later.`)
+                const landlord_by_city = landlordByUser.filter((lan) => lan.listingCity.includes(values));
+                setLandlordList(unique_internal(landlord_by_city));
+                console.log('setLandlordList', unique_internal(landlord_by_city));
             }
-        } else {
-            toast.error(`Failed to fetch the developed landlords from the server side. Please contact the technical team or try again later.`)
-        }
-    }
+        };
+      
+        fetchData();
+      }, [city, landlordByUser]);
+      
+
+    // const getLandlords = async() => {
+    //     const values = [ city ]
+        
+    //     const response = await fetch(`/api/landlords?citys=${values}`, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         }
+    //     })
+        // const response = await fetch(`http://localhost:8081/linli/landlord/readIndexByFirstName?firstName='Carroll'`, {
+        //     method: 'GET',
+        //     headers: {
+        //          'Content-Type': 'application/json',
+        //      }    
+        // })
+
+    //     if (response.status === 200){
+    //         const data = await response.json()
+    //         const landlordsData = JSON.parse(JSON.stringify(data))
+    //         //console.log(landlordsData)
+    //         const landlord_by_user = landlordsData.filter((lan) => {
+    //             if (lan.devFirstName.includes('arroll') || lan.listingDeveloper === { current_user }) {
+    //                 return lan
+    //             }
+    //         })
+    //         //console.log(landlord_by_user)
+    //         if (!data.error) {
+    //             setLandlordList(unique_internal(landlord_by_user))
+    //             setIndex(0)
+    //         } else {
+    //             toast.error(`Failed to fetch the developed landlords from the database. Please contact the technical team or try agian later.`)
+    //         }
+    //     } else {
+    //         toast.error(`Failed to fetch the developed landlords from the server side. Please contact the technical team or try again later.`)
+    //     }
+    // }
 
     const toInternalPage = () => {
         const idEnc = landlordList[index].listing_id ? btoa(landlordList[index].listing_id) : ''
@@ -129,11 +158,11 @@ const LandlordSection = ({ city }) => {
             '_blank' )  
     }
 
-    useEffect(() => {
-        if (currentCustomer) {
-            getLandlords()
-        }
-    }, [currentCustomer]);
+    // useEffect(() => {
+    //     if (currentCustomer) {
+    //         getLandlords()
+    //     }
+    // }, [currentCustomer]);
 
     return (
         <>
